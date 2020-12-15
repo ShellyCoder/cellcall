@@ -39,5 +39,3 @@ Imports:
     reshape2 (>= 1.4.4),
     tidyr (>= 1.1.0),
     clusterProfiler (>= 3.14.3)
-    
-    marker successful
