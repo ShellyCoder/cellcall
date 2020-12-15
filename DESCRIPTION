@@ -23,14 +23,13 @@ Imports:
     methods (>= 3.6.0),
     dplyr (>= 1.0.0),
     psych (>= 1.9.12.31),
-    clusterProfiler (>= 3.14.3),
     stats (>= 3.6.0),
     magrittr (>= 1.5),
     utils (>= 3.6.0),
     gridBase (>= 0.4.7),
     circlize (>= 0.4.10),
     grid (>= 3.6.0),
-    ComplexHeatmap (>= 2.5.5),
+    ComplexHeatmap (>= 2.2.0),
     pheatmap (>= 1.0.12),
     ggplot2 (>= 3.3.2),
     ggalluvial (>= 0.12.1),
@@ -38,4 +37,7 @@ Imports:
     jsonlite (>= 1.7.0),
     networkD3 (>= 0.4),
     reshape2 (>= 1.4.4),
-    tidyr (>= 1.1.0)
+    tidyr (>= 1.1.0),
+    clusterProfiler (>= 3.14.3)
+    
+    marker successful
