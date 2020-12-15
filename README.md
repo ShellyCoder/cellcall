@@ -1,160 +1,183 @@
-# miniconda琐碎记录
+# cellwave: inference of intercellular networks from single-cell transcriptomics
 
-### 1. 安装conda
-```
-wget -c https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-# https://repo.anaconda.com/miniconda/ 所有miniconda的下载地址
-# 这个版本是适合于linux的，要看清楚噢。
-# 这里选择的是latest-Linux版本，所以下载的程序会随着python的版本更新而更新
-#（现在下载的版本默认的python版本已经是3.7了）
+## 1. Introduction to CellWave
 
-chmod 777 Miniconda3-latest-Linux-x86_64.sh #给执行权限
-bash Miniconda3-latest-Linux-x86_64.sh #运行
+---
 
-source .bashrc
+### 1.1 workflow
+The figure below shows a graphical representation of the CellWave workflow.
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608018839628-0d742450-a88b-41dd-b712-84195dd8ea8a.png#align=left&display=inline&height=281&margin=%5Bobject%20Object%5D&name=image.png&originHeight=281&originWidth=846&size=81307&status=done&style=none&width=846)
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608018860688-c3991704-21a5-47a2-a6a0-82c09a4f9d85.png#align=left&display=inline&height=259&margin=%5Bobject%20Object%5D&name=image.png&originHeight=259&originWidth=846&size=129208&status=done&style=none&width=846)
+### 1.2 how to install R package
 ```
+library(devtools)
+devtools::install_github("shellylab/cellwave")
+```
+If you encounter the following error -- ERROR: dependency * are not available for package 'cellwave', installing * package manually to install dependency is a good choice.
+## 2. Main functionalities of CellWave
+
+---
+
+Specific functionalities of this package include (use data included in the package):
+### 2.1 assessing how well ligands expressed by a sender cell interact with the receptor of receiver cell.
+#### 2.1.1 load data
+The colnames can't contain punctuation such as commas, periods, dashes, etc. Using underline to connect barcoder_celltype is recommended.
+```
+  f.tmp <- system.file("extdata", "example_Data.Rdata", package="cellwave")
+  load(f.tmp)
+  
+  ## gene expression stored in the variable in.content
+  dim(in.content)
+  in.content[1:4, 1:4]
+  table(str_split(colnames(in.content), "_", simplify = T)[,2])
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608020082823-4b9c7385-56cf-4eb0-89e8-ab76167005fc.png#align=left&display=inline&height=261&margin=%5Bobject%20Object%5D&name=image.png&originHeight=261&originWidth=741&size=22973&status=done&style=none&width=741)
+#### 2.1.2 createobject
+What's important is **the parameter** as followed:
+**names.delim**  For the initial identity class for each cell, choose this delimiter from the cell's column name. E.g. If your cells are named as BARCODE_CELLTYPE, set this to "_" to separate the cell name into its component parts for picking the relevant field.
+**source**  the type of expression dataframe, eg "UMI", "fullLength", "TPM", or "CPM". If you don't want any transformation in the cellwave, using CPM data as input and set source = "CPM".
+**Org**  choose the species source of gene, eg "Homo sapiens", "Mus musculus". This parameter matters following ligand-receptor-tf resource.
+```
+  mt <- CreateNichConObject(data=in.content, min.feature = 3,
+                            names.field = 2,
+                            names.delim = "_",
+                            source = "TPM", # fullLength, UMI, TPM
+                            scale.factor = 10^6,
+                            Org = "Homo sapiens",
+                            project = "Microenvironment")
+```
+What's in the **NichConObject ？**
+mt@data$count: raw data
+mt@data$withoutlog: data proceeded by cellwave
+mt@meta.data: metadata of the data, sampleID, celltype, etc
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608031777700-0b7382f9-865b-43c0-9965-8b9c75906bf7.png#align=left&display=inline&height=318&margin=%5Bobject%20Object%5D&name=image.png&originHeight=318&originWidth=790&size=31888&status=done&style=none&width=790)
+#### 2.1.3 compute the score
+What's important is **the parameter** as followed:
+**names.delim**  For the initial identity class for each cell, choose this delimiter from the cell's column name. E.g. If your cells are named as BARCODE_CELLTYPE, set this to "_" to separate the cell name into its component parts for picking the relevant field.
+```
+mt <- TransCommuProfile(mt,
+                          pValueCor = 0.05,
+                          CorValue = 0.1,
+                          topTargetCor=1,
+                          p.adjust = 0.05,
+                          use.type="median",
+                          probs = 0.75,
+                          method="weighted",
+                          Org = 'Homo sapiens')
+```
+What's new in the **NichConObject ？**
+mt@data$expr_l_r: raw score
+mt@data$expr_l_r_log2: log2(raw score+1)
+mt@data$expr_l_r_log2_scale: do max,min transform to expr_l_r_log2
+mt@data$gsea.list: result of TF-activation 
+
+### 2.2 visualization of the ligand-receptor-TF model
+
+#### 2.1.1 overveiw in circle plot 
+set the color of each cell type
+```
+  cell_color <- data.frame(color=c('#e31a1c','#1f78b4',
+                                   '#e78ac3','#ff7f00'), stringsAsFactors = FALSE)
+  rownames(cell_color) <- c("SSC", "SPGing", "SPGed", "ST")
+```
+plot circle with cellwave object 
+```
+ViewInterCircos(object = mt, font = 2, cellColor = cell_color, lrColor = c("#F16B6F", "#84B1ED"),
+                  arr.type = "big.arrow",arr.length = 0.04,
+                  trackhight1 = 0.05, slot="expr_l_r_log2_scale",linkcolor.from.sender = TRUE,
+                  linkcolor = NULL, gap.degree = 2,order.vector=c('ST', "SSC", "SPGing", "SPGed"),
+                  trackhight2 = 0.032, track.margin2 = c(0.01,0.12), DIY = FALSE)
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608035884476-ec0ec869-3246-4260-9b8b-d922cbb2683f.png#align=left&display=inline&height=402&margin=%5Bobject%20Object%5D&name=image.png&originHeight=402&originWidth=589&size=75656&status=done&style=none&width=589)
+plot circle with DIY dataframe of mt@data$expr_l_r_log2_scale 
+```
+  ViewInterCircos(object = mt@data$expr_l_r_log2_scale, font = 2, cellColor = cell_color,
+                  lrColor = c("#F16B6F", "#84B1ED"),
+                  arr.type = "big.arrow",arr.length = 0.04,
+                  trackhight1 = 0.05, slot="expr_l_r_log2_scale",linkcolor.from.sender = TRUE,
+                  linkcolor = NULL, gap.degree = 2,order.vector=c('ST', "SSC", "SPGing", "SPGed"),
+                  trackhight2 = 0.032, track.margin2 = c(0.01,0.12), DIY = T)
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608036102646-62d254cb-af6d-4154-bdc6-e7c09d4c72d1.png#align=left&display=inline&height=401&margin=%5Bobject%20Object%5D&name=image.png&originHeight=401&originWidth=594&size=75665&status=done&style=none&width=594)
+#### 2.1.2 overveiw in pheatmap plot 
+```
+viewPheatmap(object = mt, slot="expr_l_r_log2_scale", show_rownames = T,show_colnames = T,
+             treeheight_row=0, treeheight_col=10,
+             cluster_rows = T,cluster_cols = F,fontsize = 12,angle_col = "45",
+             main="score")
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608036336849-fbfe4e8e-f542-4f07-8572-8206dc0d9b4e.png#align=left&display=inline&height=623&margin=%5Bobject%20Object%5D&name=image.png&originHeight=623&originWidth=1820&size=195839&status=done&style=none&width=1820)
+#### 2.1.3 inspect Ligand-Receptor-TF in specific cellA-cellB
+There are three types to show this triple relation.
+Funtion LR2TF to measure the triple relation between specific cells.
+```
+  mt <- LR2TF(object = mt, sender_cell="ST", recevier_cell="SSC",
+              slot="expr_l_r_log2_scale")
+  head(mt@reductions$sankey)
+```
+First type, function LRT.Dimplot.
+```
+  sank <- LRT.Dimplot(mt, fontSize = 8, nodeWidth = 30, height = NULL, width = 1200, sinksRight=FALSE, DIY.color = FALSE)
+  saveNetwork(sank, "~/ST-SSC_full.html")
+```
+The first pillar is ligand，the second pillar is receptor，the last pillar is tf.
+And the color of left and right flow is consistent with ligand and receptor respectively.
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608037011420-8a08e2c5-73f0-4d9a-bc49-87119980fcda.png#align=left&display=inline&height=287&margin=%5Bobject%20Object%5D&name=image.png&originHeight=714&originWidth=1855&size=282995&status=done&style=none&width=746)
+
+Second type, function sankey_graph with isGrandSon = FALSE.
+```
+library(magrittr)
+library(dplyr)
+tmp <- mt@reductions$sankey
+tmp1 <- dplyr::filter(tmp, weight1>0) ## filter triple relation with weight1 (LR score)
+tmp.df <- trans2tripleScore(tmp1)  ## transform weight1 and weight2 to one value (weight)
+head(tmp.df)
+
+## set the color of node in sankey graph
+mycol.vector = c('#5d62b5','#29c3be','#f2726f','#62b58f','#bc95df', '#67cdf2', '#ffc533', '#5d62b5', '#29c3be')  
+elments.num <-  tmp.df %>% unlist %>% unique %>% length()
+mycol.vector.list <- rep(mycol.vector, times=ceiling(elments.num/length(mycol.vector)))
+```
+```
+sankey_graph(df = tmp.df, axes=1:3, mycol = mycol.vector.list[1:elments.num], nudge_x = NULL,
+font.size = 4, boder.col="white", isGrandSon = F)
+```
+The first pillar is ligand，the second pillar is receptor，the last pillar is tf.
+And the color of left and right flow is consistent with ligand and receptor respectively.
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608038131311-57d827cd-6a0f-4cb1-aa68-87ec48b80f47.png#align=left&display=inline&height=604&margin=%5Bobject%20Object%5D&name=image.png&originHeight=604&originWidth=1192&size=277773&status=done&style=none&width=1192)
+
+Third type, function sankey_graph with isGrandSon = TRUE.
+```
+library(magrittr)
+library(dplyr)
+tmp <- mt@reductions$sankey
+tmp1 <- dplyr::filter(tmp, weight1>0)  ## filter triple relation with weight1 (LR score)
+tmp.df <- trans2tripleScore(tmp1)  ## transform weight1 and weight2 to one value (weight)
+
+## set the color of node in sankey graph
+mycol.vector = c('#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2')
+elments.num <-  length(unique(tmp.df$Ligand))
+mycol.vector.list <- rep(mycol.vector, times=ceiling(elments.num/length(mycol.vector)))
+```
+The first pillar is ligand，the second pillar is receptor，the last pillar is tf.
+And the color of left and right flow is consistent with one node (ligand or receptor).
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608038695456-2ce50409-aaf1-4484-bfda-bde39ec7738f.png#align=left&display=inline&height=562&margin=%5Bobject%20Object%5D&name=image.png&originHeight=562&originWidth=1025&size=322055&status=done&style=none&width=1025)
+### 2.3 enrichment in pathway
+getHyperPathway to perform enrichment, getForBubble to merge data for graph and plotBubble produce the bubble plot.
+```
+n <- mt@data$expr_l_r_log2_scale
+
+pathway.hyper.list <- lapply(colnames(n), function(i){
+    print(i)
+    tmp <- getHyperPathway(data = n, cella_cellb = i, Org="Homo sapiens")
+    return(tmp)
+})
+
+myPub.df <- getForBubble(pathway.hyper.list)
+p <- plotBubble(myPub.df)
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608044718538-54a82161-c714-4389-80f9-e715429c0754.png#align=left&display=inline&height=685&margin=%5Bobject%20Object%5D&name=image.png&originHeight=685&originWidth=1047&size=161481&status=done&style=none&width=1047)
 
 
-**参考：**[https://www.jianshu.com/p/edaa744ea47d](https://www.jianshu.com/p/edaa744ea47d)
-**
-### 2. 镜像
-#### 2.1 概览
-**一般新装的miniconda是没有 .condarc 镜像配置文件的，需要 conda config --set show_channel_urls yes后才会自动生成。如下图可见**
-```
-conda config --set show_channel_urls yes
-```
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1594985099777-f2d8c5a1-8cca-46a4-ad77-7d2b5cc63b87.png#align=left&display=inline&height=287&margin=%5Bobject%20Object%5D&name=image.png&originHeight=574&originWidth=1383&size=115107&status=done&style=none&width=691.5)
-** .condarc 镜像配置文件一开始都是默认的配置，因此要加上离我们近的清华，或北师大镜像**
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1594985271784-3a32d89c-66d4-440a-9c61-cf25b8db5482.png#align=left&display=inline&height=181&margin=%5Bobject%20Object%5D&name=image.png&originHeight=362&originWidth=962&size=65427&status=done&style=none&width=481)
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1594985279025-d989ae14-694d-461a-8c5e-1101561d023b.png#align=left&display=inline&height=306&margin=%5Bobject%20Object%5D&name=image.png&originHeight=612&originWidth=1142&size=90176&status=done&style=none&width=571)
-即可，配置成功。
 
 
-#### 2.2 detail
-
-官方channel: (先不要急着添加这两个哦~,只要添加下面的清华的4个镜像地址就足够了的~)：
-```
-conda config --add channels bioconda
-conda config --add channels conda-forge
-```
-
-官方的话这两个channel应该就够了的。
-`2020-06-14 update：但是其实现在用国内的镜像比较多，官方的频道相较而言速度较慢。但也不是绝对的，有小伙伴跟我说他使用官方的频道也很流畅，所以见仁见智啦。另外，不建议加入大量的相同的频道，如添加了官方的bioconda之后又添加清华的bioconda镜像，没有必要，而且会拖慢速度。`
-
-
-**清华镜像**
-```
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/bioconda/
-```
-`
-2020-06-14 update: 为了分担清华源镜像的压力，最近北京外国语大学也开启了镜像站点，同样是由清华TUNA团队维护的，如果有小伙伴遇到清华源速度很慢的情况的话，可以考虑换成北外的镜像。`
-`新闻传送门：[https://mirrors.tuna.tsinghua.edu.cn/news/bfsu-mirror/](https://mirrors.tuna.tsinghua.edu.cn/news/bfsu-mirror/)`
-`镜像传送门：[https://mirrors.bfsu.edu.cn/help/anaconda/](https://mirrors.bfsu.edu.cn/help/anaconda/)`
-`2020-08-05 update: 为了方便大家(当然主要是自己偷懒用), 把北外的链接也给写出来, 这样就可以直接复制粘贴了~当然两者取其一就可以了, 不用重复添加.
-
-2020-08-10 update: 在生信技能树的群里由群友@合肥-生信-gzcdo 提供了两个新的conda的国内镜像源https://mirrors.nju.edu.cn/anaconda/https://mirrors.sjtug.sjtu.edu.cn/anaconda/各位朋友也可以试试看这两个镜像呀!~`
-
-
-**北师大镜像**
-> channels:
->   - [https://mirrors.bfsu.edu.cn/anaconda/pkgs/main](https://mirrors.bfsu.edu.cn/anaconda/pkgs/main)
->   - [https://mirrors.bfsu.edu.cn/anaconda/pkgs/free](https://mirrors.bfsu.edu.cn/anaconda/pkgs/free)
->   - [https://mirrors.bfsu.edu.cn/anaconda/pkgs/r](https://mirrors.bfsu.edu.cn/anaconda/pkgs/r)
->   - [https://mirrors.bfsu.edu.cn/anaconda/pkgs/pro](https://mirrors.bfsu.edu.cn/anaconda/pkgs/pro)
->   - [https://mirrors.bfsu.edu.cn/anaconda/pkgs/msys2](https://mirrors.bfsu.edu.cn/anaconda/pkgs/msys2)
->   - [https://mirrors.bfsu.edu.cn/anaconda/cloud/conda-forge](https://mirrors.bfsu.edu.cn/anaconda/cloud/conda-forge)
->   - [https://mirrors.bfsu.edu.cn/anaconda/cloud/bioconda](https://mirrors.bfsu.edu.cn/anaconda/cloud/bioconda)
->   - bioconda
->   - r
->   - conda-forge
->   - defaults
-
-
-显示安装的频道
-```
-conda config --set show_channel_urls yes
-```
-查看已经添加的channels
-```
-conda config --get channels
-```
-已添加的channel在哪里查看
-```
-vim ~/.condarc
-```
-不希望以开终端base环境默认初始化：
-conda config --set auto_activate_base false
-### 
-3. 创建个人的虚拟环境
-
-conda create -n lty python=3.6
-设置好镜像之后速度特别快，1分钟就可以完成。
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1594985446697-00640284-3e9d-4a24-a3eb-78f7c37aece6.png#align=left&display=inline&height=256&margin=%5Bobject%20Object%5D&name=image.png&originHeight=512&originWidth=1460&size=55277&status=done&style=none&width=730)
-
-
-**查看有哪些虚拟环境**
-```
-conda env list
-```
-**![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1594985502717-1c903c5d-af79-4a92-8ff4-611e8b77f8b2.png#align=left&display=inline&height=79&margin=%5Bobject%20Object%5D&name=image.png&originHeight=158&originWidth=1031&size=14549&status=done&style=none&width=515.5)**
-**也就我刚创建的环境，还有基础的base环境
-
-**删除也很容易的
-```
-conda remove -n myenv --all
-```
-**
-### 4. 软件安装和卸载
-当然, 也可以用这个命令进行搜索（会稍微慢一点）
-```
-conda search gatk
-```
-
-安装完成后，可以用“which 软件名”来查看该软件安装的位置：
-```
-which gatk
-```
-
-如需要安装特定的版本:
-```
-conda install 软件名=版本号
-conda install gatk=3.7
-```
-
-这时conda会先卸载已安装版本，然后重新安装指定版本。
-查看已安装软件:
-```
-conda list
-```
-
-更新指定软件:
-```
-conda update gatk
-```
-
-卸载指定软件:
-```
-conda remove gatk
-```
-
-
-### 5. 创建软件的软链接
-跟着命令一路敲到这里的小旁友们估计发现了，现在退出conda环境之后之前安装的软件全都GG了，敲命令没法执行了！
-怎么办呢！其实只要把安装好的软件软连接到一个处在环境变量里的位置就可以使用了。三步走：
-
-- 第一步，创建一个文件夹
-我一般的习惯是在`/home`目录下创建一个`.soft`文件夹
-- 第二步，将这个文件夹添加到环境变量中
-```
-export PATH="~/.soft:$PATH"
-```
-
-- 第三步，软链接
-```
-ln -s ~/miniconda3/bin/gatk ~/.soft
-```
-这样就可以运行啦~如果还是不行建议试试初始化一下bashrc：`. ./bashrc`**
-**
