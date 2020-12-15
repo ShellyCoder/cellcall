@@ -8,7 +8,7 @@
 #' @param sinksRight boolean. If TRUE, the last nodes are moved to the right border of the plot.
 #' @param DIY.color boolean. If TRUE, set the parameter color.DIY with your color-setting, default is FALSE.
 #' @param color.DIY a color dataframe, rownames is cell type, value is color, default is NULL.
-#' @importFrom networkD3 sankeyNetwork JS
+#' @importFrom networkD3 sankeyNetwork JS saveNetwork
 #' @importFrom dplyr filter
 #' @importFrom stats aggregate
 #' @importFrom RColorBrewer brewer.pal
