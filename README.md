@@ -35,7 +35,13 @@ What's important is **the parameter** as followed:<br />**names.delim**  For th
                             Org = "Homo sapiens",
                             project = "Microenvironment")
 ```
-What's in the **NichConObject ？**<br />mt@data$count: raw data<br />mt@data$withoutlog: data proceeded by cellwave<br />mt@meta.data: metadata of the data, sampleID, celltype, etc<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608031777700-0b7382f9-865b-43c0-9965-8b9c75906bf7.png#align=left&display=inline&height=318&margin=%5Bobject%20Object%5D&name=image.png&originHeight=318&originWidth=790&size=31888&status=done&style=none&width=790)
+What's in the **NichConObject ？**
+```
+mt@data$count: raw data
+mt@data$withoutlog: data proceeded by cellwave
+mt@meta.data: metadata of the data, sampleID, celltype, etc
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608031777700-0b7382f9-865b-43c0-9965-8b9c75906bf7.png#align=left&display=inline&height=318&margin=%5Bobject%20Object%5D&name=image.png&originHeight=318&originWidth=790&size=31888&status=done&style=none&width=790)
 #### 2.1.3 compute the score
 What's important is **the parameter** as followed:<br />**names.delim**  For the initial identity class for each cell, choose this delimiter from the cell's column name. E.g. If your cells are named as BARCODE_CELLTYPE, set this to "_" to separate the cell name into its component parts for picking the relevant field.
 ```
@@ -49,8 +55,14 @@ mt <- TransCommuProfile(mt,
                           method="weighted",
                           Org = 'Homo sapiens')
 ```
-What's new in the **NichConObject ？**<br />mt@data$expr_l_r: raw score<br />mt@data$expr_l_r_log2: log2(raw score+1)<br />mt@data$expr_l_r_log2_scale: do max,min transform to expr_l_r_log2<br />mt@data$gsea.list: result of TF-activation 
-
+What's new in the **NichConObject ？**
+```
+mt@data$expr_l_r: raw score
+mt@data$expr_l_r_log2: log2(raw score+1)
+mt@data$expr_l_r_log2_scale: do max,min transform to expr_l_r_log2
+mt@data$gsea.list: result of TF-activation
+```
+<br />
 ### 2.2 visualization of the ligand-receptor-TF model<br />
 #### 2.1.1 overveiw in circle plot 
 set the color of each cell type
