@@ -1,9 +1,6 @@
 # cellwave: inference of intercellular networks from single-cell transcriptomics
 
 ## 1. Introduction to CellWave
-
----
-
 ### 1.1 workflow
 The figure below shows a graphical representation of the CellWave workflow.
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608018839628-0d742450-a88b-41dd-b712-84195dd8ea8a.png#align=left&display=inline&height=281&margin=%5Bobject%20Object%5D&name=image.png&originHeight=281&originWidth=846&size=81307&status=done&style=none&width=846)
@@ -15,9 +12,6 @@ devtools::install_github("shellylab/cellwave")
 ```
 If you encounter the following error -- ERROR: dependency * are not available for package 'cellwave', installing * package manually to install dependency is a good choice.
 ## 2. Main functionalities of CellWave
-
----
-
 Specific functionalities of this package include (use data included in the package):
 ### 2.1 assessing how well ligands expressed by a sender cell interact with the receptor of receiver cell.
 #### 2.1.1 load data
