@@ -171,6 +171,37 @@ pathway.hyper.list <- lapply(colnames(n), function(i){
 myPub.df <- getForBubble(pathway.hyper.list)
 p <- plotBubble(myPub.df)
 ```
-![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608044718538-54a82161-c714-4389-80f9-e715429c0754.png#align=left&display=inline&height=685&margin=%5Bobject%20Object%5D&name=image.png&originHeight=685&originWidth=1047&size=161481&status=done&style=none&width=1047)<br />
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608044718538-54a82161-c714-4389-80f9-e715429c0754.png#align=left&display=inline&height=685&margin=%5Bobject%20Object%5D&name=image.png&originHeight=685&originWidth=1047&size=161481&status=done&style=none&width=1047)
+<a name="toPeb"></a>
+### 2.4 activation of TF in receiver cell
+<a name="MY3Ne"></a>
+#### 2.4.1 ridge plot
+plot enrichment result of TF (filter or not). 
+```
+## gsea object
+egmt <- mt@data$gsea.list$SSC
+
+## filter TF
+egmt.df <- data.frame(egmt)
+head(egmt.df[,1:6])
+flag.index <- which(egmt.df$p.adjust < 0.05)
+
+ridgeplot.DIY(x=egmt, fill="p.adjust", showCategory=flag.index, core_enrichment = T,
+                orderBy = "NES", decreasing = FALSE)
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608099926349-53777dc6-352b-484e-a3a2-9a4c519906a1.png#align=left&display=inline&height=686&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=688&size=117664&status=done&style=none&width=688)
+<a name="tumnl"></a>
+#### 2.4.2 gsea plot
+```
+  ssc.tf <- names(mt@data$gsea.list$SSC@geneSets)
+  ssc.tf
+```
+Show all TF have result in the SSC.<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608100011863-2c349ce5-f197-4528-a167-2eec6004524c.png#align=left&display=inline&height=122&margin=%5Bobject%20Object%5D&name=image.png&originHeight=122&originWidth=1317&size=19698&status=done&style=none&width=1317)
+```
+  getGSEAplot(gsea.list=mt@data$gsea.list, geneSetID=c("CREBBP", "ESR1", "FOXO3"), myCelltype="SSC",
+              fc.list=mt@data$fc.list,  selectedGeneID = mt@data$gsea.list$SSC@geneSets$CREBBP[1:10],
+              mycol = NULL)
+```
+![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608100142219-a62cfef9-fe81-4a2e-8222-73d30770a122.png#align=left&display=inline&height=682&margin=%5Bobject%20Object%5D&name=image.png&originHeight=682&originWidth=692&size=75484&status=done&style=none&width=692)<br />
 <br />
 
