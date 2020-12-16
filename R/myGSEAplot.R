@@ -150,6 +150,19 @@ getGSEAplot <- function(gsea.list, myCelltype, fc.list, geneSetID, selectedGeneI
                       point.padding = unit(0.3, "lines")) +
       theme(plot.margin=margin(t = -.1, r = .2, b=.2, l=.2, unit="cm"))
     #p.pos
+  }else{
+    p.pos <- ggplot(selectgenes, aes(x, y, fill = "black", color = "black", label = gsym)) +
+      geom_segment(data=df2, aes_(x=~x, xend=~x, y=~y, yend=0),
+                   color = "#80b1d3") +
+
+      #scale_x_continuous(expand=c(0,0)) +
+      geom_hline(yintercept = 0, lty = 2, lwd = 0.2) + #在0的位置画虚线
+      ylab("Ranked list\n metric") +
+      xlab("Rank in ordered dataset") +
+
+      theme_bw() +
+      theme(axis.text.y=element_text(size = 12, face = "bold"),
+            panel.grid = element_blank())+  theme(plot.margin=margin(t = -.1, r = .2, b=.2, l=.2, unit="cm"))
   }
 
   #########################################################################

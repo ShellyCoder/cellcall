@@ -7,7 +7,7 @@
 ##' @param decreasing logical. Should the orderBy order be increasing or decreasing?
 ##' @importFrom ggplot2 scale_fill_gradientn aes_string scale_fill_continuous xlab ylab guide_colorbar
 ##' @importFrom ggridges geom_density_ridges
-##' @importFrom DOSE theme_dose
+##' @importFrom DOSE theme_dose geneInCategory
 ##' @export
 ridgeplot.DIY <- function(x, showCategory = targetTFindex, fill="p.adjust",
                                  core_enrichment = TRUE,
