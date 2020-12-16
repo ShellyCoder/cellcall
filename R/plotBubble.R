@@ -29,7 +29,7 @@ plotBubble <- function(dat){
                    x="CC",y="Pathway",title="")
 
     ## 修改x轴的文字  face取值：plain普通，bold加粗，italic斜体，bold.italic斜体加粗
-    pr = pr + theme(axis.text.x = element_text(size = 12, color = "black", face = "plain", vjust = 1.0, hjust = 1, angle = 45),
+    pr = pr + theme(axis.text.x = element_text(size = 8, color = "black", face = "plain", vjust = 1.0, hjust = 1, angle = 45),
                     panel.background = element_rect(fill = "white", colour = "black", size = 1))
     return(pr)
 }
