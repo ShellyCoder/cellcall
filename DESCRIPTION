@@ -36,4 +36,8 @@ Imports:
     jsonlite (>= 1.7.0),
     networkD3 (>= 0.4),
     reshape2 (>= 1.4.4),
-    tidyr (>= 1.1.0)
+    tidyr (>= 1.1.0),
+    enrichplot (>= 1.6.1),
+    ggrepel (>= 0.8.2),
+    DOSE (>= 3.12.0),
+    ggridges (>= 0.5.2)
