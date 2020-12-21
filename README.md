@@ -122,6 +122,8 @@ First type, function LRT.Dimplot.
 ```
 The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with ligand and receptor respectively.<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608037011420-8a08e2c5-73f0-4d9a-bc49-87119980fcda.png#align=left&display=inline&height=287&margin=%5Bobject%20Object%5D&name=image.png&originHeight=714&originWidth=1855&size=282995&status=done&style=none&width=746)
 
+---
+
 Second type, function sankey_graph with isGrandSon = FALSE.
 ```
 library(magrittr)
@@ -141,6 +143,8 @@ sankey_graph(df = tmp.df, axes=1:3, mycol = mycol.vector.list[1:elments.num], nu
 font.size = 4, boder.col="white", isGrandSon = F)
 ```
 The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with ligand and receptor respectively.<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608038131311-57d827cd-6a0f-4cb1-aa68-87ec48b80f47.png#align=left&display=inline&height=604&margin=%5Bobject%20Object%5D&name=image.png&originHeight=604&originWidth=1192&size=277773&status=done&style=none&width=1192)
+
+---
 
 Third type, function sankey_graph with isGrandSon = TRUE.
 ```
