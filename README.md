@@ -112,7 +112,7 @@ viewPheatmap(object = mt, slot="expr_l_r_log2_scale", show_rownames = T,show_col
 There are three types to show this triple relation.<br />Funtion LR2TF to measure the triple relation between specific cells.
 ```
   mt <- LR2TF(object = mt, sender_cell="ST", recevier_cell="SSC",
-              slot="expr_l_r_log2_scale")
+              slot="expr_l_r_log2_scale", org="Homo sapiens")
   head(mt@reductions$sankey)
 ```
 First type, function LRT.Dimplot.
@@ -154,6 +154,9 @@ tmp.df <- trans2tripleScore(tmp1)  ## transform weight1 and weight2 to one value
 mycol.vector = c('#9e0142','#d53e4f','#f46d43','#fdae61','#fee08b','#e6f598','#abdda4','#66c2a5','#3288bd','#5e4fa2')
 elments.num <-  length(unique(tmp.df$Ligand))
 mycol.vector.list <- rep(mycol.vector, times=ceiling(elments.num/length(mycol.vector)))
+
+sankey_graph(df = tmp.df, axes=1:3, mycol = mycol.vector.list[1:elments.num], isGrandSon = TRUE,
+              nudge_x = nudge_x, font.size = 2, boder.col="white", set_alpha = 0.8)
 ```
 The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with one node (ligand or receptor).<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608038695456-2ce50409-aaf1-4484-bfda-bde39ec7738f.png#align=left&display=inline&height=562&margin=%5Bobject%20Object%5D&name=image.png&originHeight=562&originWidth=1025&size=322055&status=done&style=none&width=1025)
 <a name="4oHTG"></a>
