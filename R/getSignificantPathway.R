@@ -67,7 +67,7 @@ getHyperPathway <- function(data, cella_cellb, Org="Homo sapiens"){
   colnames(path.list.tmp.df)[4] <- "enrichment_score"
 
   cc.tmp <- cella_cellb
-  cc.tmp.triple <- unique(filter(path.list.tmp.df, cc==cc.tmp)[,1:2,drop=T])
+  cc.tmp.triple <- unique(filter(path.list.tmp.df, cc==cc.tmp)[,1:2,drop=T] %>% as.data.frame())
   if(nrow(cc.tmp.triple)==0){
     res.df <- data.frame(Pvalue=1, Jaccard=0, NES=0, pathway="hsa04330")
     rownames(res.df) <- "hsa04330"
