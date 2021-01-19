@@ -9,7 +9,7 @@ The figure below shows a graphical representation of the CellWave workflow.<br /
 ### 1.2 how to install R package
 ```
 library(devtools)
-devtools::install_github("shellylab/cellwave")
+devtools::install_github("ShellyCoder/cellwave")
 ```
 If you encounter the following error -- ERROR: dependency * are not available for package 'cellwave', installing * package manually to install dependency is a good choice.
 <a name="v9J0k"></a>
