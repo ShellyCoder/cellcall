@@ -314,7 +314,7 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
           if(tf_val > 0 & sender_val>0 & receiver_val >0){
             # val_tmp <- sender_val^2 + receiver_val^2 + tf_val  #sender_val^2 + receiver_val^2 + tf_val^2
             sender_val_weighted <- softmax_ligand[sender_tmp, i]
-            receiver_val_weighted <- softmax_receptor[receiver_tmp, i]
+            receiver_val_weighted <- softmax_receptor[receiver_tmp, j]
             # val_tmp <- sender_val_weighted * (receiver_val + tf_val*(sender_val+receiver_val)/(sender_val+receiver_val+tf_val))
             val_tmp <- 100*(sender_val_weighted^2 + receiver_val_weighted^2) * tf_val
             # print(val_tmp)
