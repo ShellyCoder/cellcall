@@ -1,4 +1,4 @@
-Package: cellwave
+Package: cellcall
 Title: inference of intercellular networks from single-cell
     transcriptomics
 Version: 0.0.0.9000
@@ -6,7 +6,7 @@ Authors@R:
     person(given = "Tianyuan",
            family = "Liu",
            role = c("aut", "cre"),
-           email = "lty@helloworld.org.cn")
+           email = "biocoder1024@hotmail.com")
 Description: inference of intercellular networks from
     single-cell transcriptomics
 License: Artistic-2.0
@@ -24,7 +24,6 @@ Imports:
     clusterProfiler (>= 3.14.3),
     stats (>= 3.6.0),
     magrittr (>= 2.0.1),
-    ggplot2 (>= 3.3.2),
     utils (>= 3.6.0),
     circlize (>= 0.4.10),
     gridBase (>= 0.4.7),
@@ -32,6 +31,7 @@ Imports:
     ComplexHeatmap (>= 2.2.0),
     pheatmap (>= 1.0.12),
     ggalluvial (>= 0.12.1),
+    ggplot2 (>= 3.3.2),
     RColorBrewer (>= 1.1.2),
     jsonlite (>= 1.7.0),
     networkD3 (>= 0.4),
@@ -39,5 +39,5 @@ Imports:
     tidyr (>= 1.1.0),
     enrichplot (>= 1.6.1),
     ggrepel (>= 0.8.2),
-    DOSE (>= 3.12.0),
-    ggridges (>= 0.5.2)
+    ggridges (>= 0.5.2),
+    DOSE (>= 3.12.0)
