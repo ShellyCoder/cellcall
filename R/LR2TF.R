@@ -4,12 +4,13 @@
 #' @param recevier_cell the cell type of recevier cell
 #' @param slot plot the graph with the data of specific slot
 #' @param org choose the species source of gene, eg "Homo sapiens", "Mus musculus"
+#' @param IS_core logical variable ,whether use reference LR data or include extended datasets
 #' @importFrom utils read.table head
 #' @importFrom stringr str_split
 #' @importFrom dplyr filter
 #' @export
 
-LR2TF <- function(object, sender_cell, recevier_cell, slot="expr_l_r_log2_scale", org="Homo sapiens"){
+LR2TF <- function(object, sender_cell, recevier_cell, slot="expr_l_r_log2_scale", org="Homo sapiens", IS_core=TRUE){
   options(stringsAsFactors = F) ##options:允许用户对工作空间进行全局设置，stringsAsFactors防止R自动把字符串string的列辨认成factor
   # library(dplyr)
   myData <- object@data[[slot]]
@@ -22,12 +23,32 @@ LR2TF <- function(object, sender_cell, recevier_cell, slot="expr_l_r_log2_scale"
   recevier_cell <- recevier_cell
   # top_n <- top_n
 
-  if( org=="Homo sapiens"){
-    f.tmp <- system.file("extdata", "ligand_receptor_TFs.txt", package="cellwave")
+  if(org == 'Homo sapiens'){
+    f.tmp <- system.file("extdata", "new_ligand_receptor_TFs.txt", package="cellcall")
     triple_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
-  }else if( org=="Mus musculus"){
-    f.tmp <- system.file("extdata", "ligand_receptor_TFs_homology.txt", package="cellwave")
+
+    if(IS_core){
+    }else{
+      f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_extended.txt", package="cellcall")
+      triple_relation_extended <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+      triple_relation <- rbind(triple_relation, triple_relation_extended)
+    }
+
+    f.tmp <- system.file("extdata", "tf_target.txt", package="cellcall")
+    target_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+  }else if(org == 'Mus musculus'){
+    f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_homology.txt", package="cellcall")
     triple_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+
+    if(IS_core){
+    }else{
+      f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_homology_extended.txt", package="cellcall")
+      triple_relation_extended <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+      triple_relation <- rbind(triple_relation, triple_relation_extended)
+    }
+
+    f.tmp <- system.file("extdata", "tf_target_homology.txt", package="cellcall")
+    target_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
   }
 
   interest_group <- myData[,paste(sender_cell, recevier_cell, sep = "-"), drop=F]

@@ -8,6 +8,7 @@
 #' @param p.adjust gsea pValue of regulons with BH adjusted threshold, default is 0.05
 #' @param method "weighted", "max", "mean", of which "weighted" is default. choose the proper method to score downstream activation of ligand-receptor all regulons of given ligand-receptor relation
 #' @param Org choose the species source of gene, eg "Homo sapiens", "Mus musculus"
+#' @param IS_core logical variable ,whether use reference LR data or include extended datasets
 #' @return the result dataframe of \code{cell communication}
 #' @importFrom stringr str_split
 #' @importFrom stats quantile median
@@ -16,19 +17,35 @@
 #' @importFrom utils read.table head
 #' @export
 
-ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1, method="weighted", p.adjust=0.05, use.type="median", probs = 0.75, Org = 'Homo sapiens'){
+ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1, method="weighted", p.adjust=0.05, use.type="median", probs = 0.75, Org = 'Homo sapiens', IS_core = TRUE){
   Sys.setenv(R_MAX_NUM_DLLS=999) ##Sys.setenv, 修改环境设置，R的namespace是有上限的，如果导入包时超过这个上次就会报错,R_MAX_NUM_DLLS可以修改这个上限
   options(stringsAsFactors = F) ##options:允许用户对工作空间进行全局设置，stringsAsFactors防止R自动把字符串string的列辨认成factor
 
   if(Org == 'Homo sapiens'){
-    f.tmp <- system.file("extdata", "ligand_receptor_TFs.txt", package="cellwave")
+    f.tmp <- system.file("extdata", "new_ligand_receptor_TFs.txt", package="cellcall")
     triple_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
-    f.tmp <- system.file("extdata", "tf_target.txt", package="cellwave")
+
+    if(IS_core){
+    }else{
+      f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_extended.txt", package="cellcall")
+      triple_relation_extended <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+      triple_relation <- rbind(triple_relation, triple_relation_extended)
+    }
+
+    f.tmp <- system.file("extdata", "tf_target.txt", package="cellcall")
     target_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
   }else if(Org == 'Mus musculus'){
-    f.tmp <- system.file("extdata", "ligand_receptor_TFs_homology.txt", package="cellwave")
+    f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_homology.txt", package="cellcall")
     triple_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
-    f.tmp <- system.file("extdata", "tf_target_homology.txt", package="cellwave")
+
+    if(IS_core){
+    }else{
+      f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_homology_extended.txt", package="cellcall")
+      triple_relation_extended <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+      triple_relation <- rbind(triple_relation, triple_relation_extended)
+    }
+
+    f.tmp <- system.file("extdata", "tf_target_homology.txt", package="cellcall")
     target_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
   }
 

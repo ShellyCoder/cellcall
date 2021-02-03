@@ -29,7 +29,7 @@ getForBubble <- function(pathway.hyper.list = pathway.hyper.list){
   pathway.hyper.df.NES <- pathway.hyper.df.NES[rowSums(pathway.hyper.df.NES)!=0,]
   pathway.hyper.df.pvalue <- pathway.hyper.df.pvalue[rowSums(pathway.hyper.df.NES)!=0,]
 
-  f.tmp <- system.file("extdata", "KEGG_SYMBOL_ID.txt", package="cellwave")
+  f.tmp <- system.file("extdata", "KEGG_SYMBOL_ID.txt", package="cellcall")
   pathway.info <- read.table(f.tmp, sep = '\t', quote = "", header = FALSE, stringsAsFactors = F)
   colnames(pathway.info) <- c('id', 'name', "main.object.name", "sub.object.name")
   rownames(pathway.info) <- pathway.info$id

@@ -1,6 +1,7 @@
 #' enrich communication relation on the pathway
 #' @param data a dataframe of communication score with row LR and column cellA-cellB
 #' @param cella_cellb explore the LR between sender cellA and receiver cellB, eg: "A-B"
+#' @param IS_core logical variable ,whether use reference LR data or include extended datasets
 #' @param Org choose the species source of gene, only "Homo sapiens" in this version.
 #' @return the dataframe with column: Pvalue, Jaccard, NES and pathway
 #' @importFrom utils read.table
@@ -10,17 +11,37 @@
 #' @importFrom stats phyper sd
 #' @export
 
-getHyperPathway <- function(data, cella_cellb, Org="Homo sapiens"){
+getHyperPathway <- function(data, cella_cellb, IS_core=TRUE, Org="Homo sapiens"){
   n<- data
   Org <- Org
   # library(stringr)
   ## 统计每条通路中涉及到的三元关系
   if(Org == 'Homo sapiens'){
-    f.tmp <- system.file("extdata", "ligand_receptor_TFs.txt", package="cellwave")
+    f.tmp <- system.file("extdata", "new_ligand_receptor_TFs.txt", package="cellcall")
     triple_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+
+    if(IS_core){
+    }else{
+      f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_extended.txt", package="cellcall")
+      triple_relation_extended <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+      triple_relation <- rbind(triple_relation, triple_relation_extended)
+    }
+
+    f.tmp <- system.file("extdata", "tf_target.txt", package="cellcall")
+    target_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
   }else if(Org == 'Mus musculus'){
-    f.tmp <- system.file("extdata", "ligand_receptor_TFs_homology.txt", package="cellwave")
+    f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_homology.txt", package="cellcall")
     triple_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+
+    if(IS_core){
+    }else{
+      f.tmp <- system.file("extdata", "new_ligand_receptor_TFs_homology_extended.txt", package="cellcall")
+      triple_relation_extended <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
+      triple_relation <- rbind(triple_relation, triple_relation_extended)
+    }
+
+    f.tmp <- system.file("extdata", "tf_target_homology.txt", package="cellcall")
+    target_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
   }
 
   tmp <- triple_relation
