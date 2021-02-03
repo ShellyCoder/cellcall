@@ -13,7 +13,8 @@ TransCommuProfile(
   use.type = "median",
   probs = 0.75,
   method = "weighted",
-  Org = "Homo sapiens"
+  Org = "Homo sapiens",
+  IS_core = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ TransCommuProfile(
 \item{method}{"weighted", "max", "mean", of which "weighted" is default. choose the proper method to score downstream activation of ligand-receptor all regulons of given ligand-receptor relation}
 
 \item{Org}{choose the species source of gene, eg "Homo sapiens", "Mus musculus"}
+
+\item{IS_core}{logical variable ,whether use reference LR data or include extended datasets}
 }
 \value{
 the value of \code{cellwave object}

@@ -13,7 +13,8 @@ ConnectProfile(
   p.adjust = 0.05,
   use.type = "median",
   probs = 0.75,
-  Org = "Homo sapiens"
+  Org = "Homo sapiens",
+  IS_core = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ ConnectProfile(
 \item{probs}{Percentile of gene expression in one cell type to represents this cell type}
 
 \item{Org}{choose the species source of gene, eg "Homo sapiens", "Mus musculus"}
+
+\item{IS_core}{logical variable ,whether use reference LR data or include extended datasets}
 }
 \value{
 the result dataframe of \code{cell communication}

@@ -9,7 +9,8 @@ LR2TF(
   sender_cell,
   recevier_cell,
   slot = "expr_l_r_log2_scale",
-  org = "Homo sapiens"
+  org = "Homo sapiens",
+  IS_core = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ LR2TF(
 \item{slot}{plot the graph with the data of specific slot}
 
 \item{org}{choose the species source of gene, eg "Homo sapiens", "Mus musculus"}
+
+\item{IS_core}{logical variable ,whether use reference LR data or include extended datasets}
 }
 \description{
 get score of Triple relation corresponding specific cellA-cellB

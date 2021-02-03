@@ -4,12 +4,14 @@
 \alias{getHyperPathway}
 \title{enrich communication relation on the pathway}
 \usage{
-getHyperPathway(data, cella_cellb, Org = "Homo sapiens")
+getHyperPathway(data, cella_cellb, IS_core = TRUE, Org = "Homo sapiens")
 }
 \arguments{
 \item{data}{a dataframe of communication score with row LR and column cellA-cellB}
 
 \item{cella_cellb}{explore the LR between sender cellA and receiver cellB, eg: "A-B"}
+
+\item{IS_core}{logical variable ,whether use reference LR data or include extended datasets}
 
 \item{Org}{choose the species source of gene, only "Homo sapiens" in this version.}
 }
