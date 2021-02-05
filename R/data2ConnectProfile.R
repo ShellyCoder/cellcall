@@ -74,27 +74,29 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
   myrownames <- c()
 
   complex <- complex_tmp
-  for(i in 1:length(complex)){
-    i_tmp = strsplit(complex[i], ',')
-    # print(i_tmp)
-    if( sum(i_tmp[[1]] %in% detect_gene) == length(i_tmp[[1]]) ){
-      tmp_df <- expr_set[i_tmp[[1]],]
-      tmp_mean <- colMeans(tmp_df)
-      tmp_index <- unique(unlist(apply(tmp_df, 1,function(x) {which(x==0)}))) # complex任意一个表达为0, 该complex不存在
-      tmp_mean[tmp_index] <- 0
+  if(length(complex)>0){
+      for(i in 1:length(complex)){
+        i_tmp = strsplit(complex[i], ',')
+        # print(i_tmp)
+        if( sum(i_tmp[[1]] %in% detect_gene) == length(i_tmp[[1]]) ){
+          tmp_df <- expr_set[i_tmp[[1]],]
+          tmp_mean <- colMeans(tmp_df)
+          tmp_index <- unique(unlist(apply(tmp_df, 1,function(x) {which(x==0)}))) # complex任意一个表达为0, 该complex不存在
+          tmp_mean[tmp_index] <- 0
 
-      # print(res_tmp)
-      complex_matrix <- rbind(complex_matrix, tmp_mean)
-      myrownames <- c(myrownames, complex[i])
-    }
-  }
+          # print(res_tmp)
+          complex_matrix <- rbind(complex_matrix, tmp_mean)
+          myrownames <- c(myrownames, complex[i])
+        }
+      }
 
-  complex_matrix <- complex_matrix[-1,]
+      complex_matrix <- complex_matrix[-1,]
 
-  ## 把complex的联合表达值加上
-  if(nrow(complex_matrix) > 0){
-    rownames(complex_matrix) <- myrownames
-    expr_set <- rbind(expr_set, complex_matrix)
+      ## 把complex的联合表达值加上
+      if(nrow(complex_matrix) > 0){
+        rownames(complex_matrix) <- myrownames
+        expr_set <- rbind(expr_set, complex_matrix)
+      }
   }
 
   expr_set <- expr_set[apply(expr_set, 1, function(x){sum(x!=0)})>0,] ##删除没检测到的gene
