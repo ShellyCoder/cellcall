@@ -1,4 +1,4 @@
-# cellwave
+# cellcall
 inferring cell-cell communication from scRNA-seq of ligand-receptor
 # CellCall: inference of intercellular networks from single-cell transcriptomics
 
