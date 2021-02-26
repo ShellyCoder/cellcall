@@ -217,10 +217,6 @@ os       Windows 10 x64
 system   x86_64, mingw32
 ui       RStudio
 language en
-collate  Chinese (Simplified)_China.936
-ctype    Chinese (Simplified)_China.936
-tz       Asia/Taipei
-date     2021-02-01
 • Packages ----------------------------------------------------------------------------------------------------
 package         * version    date       lib source
 AnnotationDbi     1.48.0     2019-10-29 [1] Bioconductor
