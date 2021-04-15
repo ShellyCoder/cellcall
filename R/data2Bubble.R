@@ -6,7 +6,7 @@
 #' @importFrom utils read.table
 #' @export
 
-getForBubble <- function(pathway.hyper.list = pathway.hyper.list){
+getForBubble <- function(pathway.hyper.list = pathway.hyper.list, cella_cellb){
   ## 合并不同cc间的p值，jaccard系数和NES值
   # library(reshape2)
   pathway.hyper.df <- Reduce(function(x,y) full_join(x, y, by=c("pathway")), pathway.hyper.list, accumulate =FALSE)
@@ -15,13 +15,13 @@ getForBubble <- function(pathway.hyper.list = pathway.hyper.list){
 
   ## 拆分后，获得不同cc间的p值
   pathway.hyper.df.pvalue <- pathway.hyper.df[, seq(from=1, to=ncol(pathway.hyper.df), by=3)]
-  colnames(pathway.hyper.df.pvalue) <- colnames(n)
+  colnames(pathway.hyper.df.pvalue) <- cella_cellb
   rownames(pathway.hyper.df.pvalue) <- rownames(pathway.hyper.df)
   pathway.hyper.df.pvalue[is.na(pathway.hyper.df.pvalue)] <- 1
 
   ## 拆分后，获得不同cc间的NES值
   pathway.hyper.df.NES <- pathway.hyper.df[, seq(from=3, to=ncol(pathway.hyper.df), by=3)]
-  colnames(pathway.hyper.df.NES) <- colnames(n)
+  colnames(pathway.hyper.df.NES) <- cella_cellb
   rownames(pathway.hyper.df.NES) <- rownames(pathway.hyper.df)
   pathway.hyper.df.NES[is.na(pathway.hyper.df.NES)] <- 0
 
