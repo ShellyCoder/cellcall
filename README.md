@@ -171,7 +171,7 @@ n <- mt@data$expr_l_r_log2_scale
 
 pathway.hyper.list <- lapply(colnames(n), function(i){
     print(i)
-    tmp <- getHyperPathway(data = n, cella_cellb = i, Org="Homo sapiens")
+    tmp <- getHyperPathway(data = n, object = mt, cella_cellb = i, Org="Homo sapiens")
     return(tmp)
 })
 
