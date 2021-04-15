@@ -11,9 +11,10 @@
 #' @importFrom stats phyper sd
 #' @export
 
-getHyperPathway <- function(data, cella_cellb, IS_core=TRUE, Org="Homo sapiens"){
+getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo sapiens"){
   n<- data
   Org <- Org
+  mt <- object
   # library(stringr)
   ## 统计每条通路中涉及到的三元关系
   if(Org == 'Homo sapiens'){
@@ -105,6 +106,9 @@ getHyperPathway <- function(data, cella_cellb, IS_core=TRUE, Org="Homo sapiens")
     k = lncrna_has_mirna  # 从球袋里面无放回的拿球的个数，这里就是具体某一个lncRNA拥有的miRNA个数
     stats::phyper(q=q, m=m, n=n, k=k, log = FALSE, lower.tail = FALSE) # lower.tail = FALSE使得最后结果是（1-累计概率值）,也就是P[X > q],也就是P[X >= intersect_mirna]
   }
+
+  cc.tmp.triple$triple <- as.character(cc.tmp.triple$triple)
+  cc.tmp.triple$path <- as.character(cc.tmp.triple$path)
 
   cc.tmp.pathway <- unique(cc.tmp.triple$path)
   do.call(rbind, lapply(cc.tmp.pathway, function(x){
