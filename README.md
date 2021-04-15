@@ -176,7 +176,7 @@ pathway.hyper.list <- lapply(colnames(n), function(i){
     return(tmp)
 })
 
-myPub.df <- getForBubble(pathway.hyper.list)
+myPub.df <- getForBubble(pathway.hyper.list, cella_cellb=colnames(n))
 p <- plotBubble(myPub.df)
 ```
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608044718538-54a82161-c714-4389-80f9-e715429c0754.png#align=left&display=inline&height=685&margin=%5Bobject%20Object%5D&name=image.png&originHeight=685&originWidth=1047&size=161481&status=done&style=none&width=1047)
