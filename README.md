@@ -3,9 +3,9 @@ inferring cell-cell communication from scRNA-seq of ligand-receptor
 # CellCall: inference of intercellular networks from single-cell transcriptomics
 
 ## Updated information of CellCall
-#### 2021/04/15 -- change the function getHyperPathway for the debug of factor variable.
-#### 2021/02/02 -- Add the number of LR datasets reference to 1141.
-#### 2021/02/01 -- The reference LR datasets change to, core and extended, two parts. And change the tool name CellCall not CellWave.
+#### 2021/04/15 -- Change the function getHyperPathway for the debug of factor variable.
+#### 2021/02/02 -- Increase the number of LR datasets reference to 1141.
+#### 2021/02/01 -- The reference LR datasets change to, core and extended, two parts. And rename the tool CellCall not CellWave.
 #### 2020/12/11 -- The tool CellWave is online.
 ## 1. Introduction to CellCall
 ### 1.1 workflow
