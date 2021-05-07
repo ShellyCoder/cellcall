@@ -62,7 +62,7 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
       # print(x)
       l.tmp <- str_split(x,"-")[[1]][1]
       r.tmp <- str_split(x,"-")[[1]][2]
-      a.tmp <- triple_relation %>% filter(Ligand_Symbol==l.tmp & Receptor_Symbol==r.tmp) %>% .[,c('pathway_ID','TF_Symbol')]
+      a.tmp <- triple_relation %>% dplyr::filter(Ligand_Symbol==l.tmp & Receptor_Symbol==r.tmp) %>% .[,c('pathway_ID','TF_Symbol')]
       recevier.tmp <- str_split(names.tmp, '-', simplify = T)[,2]
       df.tmp <- mt@data$regulons_matrix[a.tmp$TF_Symbol, recevier.tmp, drop=F]
       colnames(df.tmp) <- names.tmp
@@ -89,7 +89,7 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
   colnames(path.list.tmp.df)[4] <- "enrichment_score"
 
   cc.tmp <- cella_cellb
-  cc.tmp.triple <- unique(filter(path.list.tmp.df, cc==cc.tmp)[,1:2,drop=T] %>% as.data.frame())
+  cc.tmp.triple <- unique(dplyr::filter(path.list.tmp.df, cc==cc.tmp)[,1:2,drop=T] %>% as.data.frame())
   if(nrow(cc.tmp.triple)==0){
     res.df <- data.frame(Pvalue=1, Jaccard=0, NES=0, pathway="hsa04330")
     rownames(res.df) <- "hsa04330"
@@ -112,8 +112,8 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
 
   cc.tmp.pathway <- unique(cc.tmp.triple$path)
   do.call(rbind, lapply(cc.tmp.pathway, function(x){
-    unique(filter(path.triple.tmp.df, path==x)[,2]) -> pathway.triple.tmp
-    unique(filter(cc.tmp.triple, path==x)[,1]) -> cc.triple.tmp
+    unique(dplyr::filter(path.triple.tmp.df, path==x)[,2]) -> pathway.triple.tmp
+    unique(dplyr::filter(cc.tmp.triple, path==x)[,1]) -> cc.triple.tmp
     intersect_mirna <- length(intersect(pathway.triple.tmp, cc.triple.tmp))
     mrna_has_mirna <- length(pathway.triple.tmp)
     all_mirna <- length(unique(path.triple.tmp.df$triple))
@@ -135,8 +135,8 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
 
   all.path.tmp <- unique(path.triple.tmp.df$path)
   all.path.Jaccard.tmp <- do.call(rbind, lapply(all.path.tmp, function(x){
-    unique(filter(path.triple.tmp.df, path==x)[,2]) -> pathway.triple.tmp
-    unique(filter(cc.tmp.triple, path==x)[,1]) -> cc.triple.tmp
+    unique(dplyr::filter(path.triple.tmp.df, path==x)[,2]) -> pathway.triple.tmp
+    unique(dplyr::filter(cc.tmp.triple, path==x)[,1]) -> cc.triple.tmp
 
     Jaccard.tmp <- length(intersect(pathway.triple.tmp, cc.triple.tmp))/length(unique(c(pathway.triple.tmp, cc.triple.tmp)))
     return(Jaccard.tmp)
