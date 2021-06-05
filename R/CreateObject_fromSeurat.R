@@ -1,10 +1,10 @@
 #' Create Nichobject from Seurat object
-#' @slot Seurat.object  The Seurat object which stores the expression matrix and cell type information
-#' @slot slot The name of slot which contains expression matrix, default "counts".
-#' @slot cell_type The name of specific column which contains cell type information, default "orig.ident".
+#' @param Seurat.object  The Seurat object which stores the expression matrix and cell type information
+#' @param slot The name of slot which contains expression matrix, default "counts".
+#' @param cell_type The name of specific column which contains cell type information, default "orig.ident".
 #' @param source the type of expression dataframe, eg "UMI", "fullLength", "TPM", or "CPM"
 #' @param scale.factor set the scale factor, default "10^6"
-#' @slot Org the species of this scRNA-seq
+#' @param Org the species of this scRNA-seq
 #' @importFrom Seurat GetAssayData
 #' @export
 #'
