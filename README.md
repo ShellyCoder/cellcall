@@ -20,8 +20,7 @@
 
 <a name="a22c6860"></a>
 ### 1.1 workflow
-
-<br />The figure below shows a graphical representation of the CellCall workflow.<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168160448-8ee48425-8406-45a1-8680-3c220176e73b.png#align=left&display=inline&height=634&margin=%5Bobject%20Object%5D&name=image.png&originHeight=634&originWidth=714&size=211419&status=done&style=none&width=714#id=XTMe1&originHeight=634&originWidth=714&originalType=binary&status=done&style=none)<br />
+The figure below shows a graphical representation of the CellCall workflow.<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168160448-8ee48425-8406-45a1-8680-3c220176e73b.png#align=left&display=inline&height=634&margin=%5Bobject%20Object%5D&name=image.png&originHeight=634&originWidth=714&size=211419&status=done&style=none&width=714#id=XTMe1&originHeight=634&originWidth=714&originalType=binary&ratio=1&status=done&style=none)<br />
 
 <a name="27dc18d1"></a>
 ### 1.2 how to install R package
@@ -31,13 +30,11 @@
 library(devtools)
 devtools::install_github("ShellyCoder/cellcall")
 ```
-
-<br />If you encounter the following error -- ERROR: dependency _ are not available for package 'cellcall', installing _ package manually to install dependency, in refer to the namespace file,  is a good choice.<br />
+If you encounter the following error -- ERROR: dependency _ are not available for package 'cellcall', installing _ package manually to install dependency, in refer to the namespace file,  is a good choice.<br />
 
 <a name="689d6784"></a>
 ## 2. Main functionalities of CellCall
-
-<br />Specific functionalities of this package include (use data included in the package):<br />
+Specific functionalities of this package include (use data included in the package):<br />
 
 <a name="e8321f2b"></a>
 ### 2.1 assessing how well ligands expressed by a sender cell interact with the receptor of receiver cell.
@@ -54,7 +51,7 @@ The format of the counts file is as follow table:<br />1. The row names: gene sy
 | DPM1 | 0.000 | 0.000 | 21.498 | 4.246 | 7.382 | 0.000 | 2.385 |
 | SCYL3 | 5.983 | 1.215 | 0.000 | 0.518 | 2.386 | 4.002 | 14.792 |
 
-This instruction may take the in-house dataset included in the package as an example. User can load the dataset with command following in the code box. There are 366 single cells and 35,135 genes that were performed with the scRNA sequencing.<br />​<br />
+This instruction may take the in-house dataset included in the package as an example. User can load the dataset with command following in the code box. There are 366 single cells and 35,135 genes that were performed with the scRNA sequencing.
 ```
   f.tmp <- system.file("extdata", "example_Data.Rdata", package="cellcall")
   load(f.tmp)
@@ -64,8 +61,6 @@ This instruction may take the in-house dataset included in the package as an exa
   in.content[1:4, 1:4]
   table(str_split(colnames(in.content), "_", simplify = T)[,2])
 ```
-​
-
 We next use the expression dataframe  to create a CreateNichCon object with the function CreateNichConObject as the code in part 2.1.2. The object serves as a container that contains both data (like the expression dataframe) and analysis (like score, or enrichment results) for a single-cell dataset.<br />
 
 <a name="e815f697"></a>
@@ -83,7 +78,7 @@ What's important is **the parameter setting** as followed:
 
 1. **data**
 
-A dataframe with row of gene and column of sample and the value must be numeric. Meanwhile what matters is that the colnames of dataframe should be in line with the paramter 'names.delim' and 'names.field', the former for pattern to splite every colnames, the latter for setting which index in splited colnames is cell type information. A names.delim, "_", and a names.field, '3', get the information 'CELLTYPE' from the colnames, 'BARCODE_CLUSTER_CELLTYPE',  stored in CreateNichCon@meta.data. If the colnames of data don't coincide with the paramter 'names.delim' and 'names.field', CreateNichCon object may fail to create.
+A dataframe with row of gene and column of sample and the value must be numeric. Meanwhile what matters is that the colnames of dataframe should be in line with the paramter 'names.delim' and 'names.field', the former for pattern to splite every colnames, the latter for setting which index in splited colnames is cell type information.<br />The function can get the information 'CELLTYPE' from the colnames 'BARCODE_CLUSTER_CELLTYPE' with names.delim-"_" and a names.field-'3', and then stored in slot meta.data in CreateNichCon.<br />Cell type annotation from every cell is essential for scoring cell communication. If the colnames of data don't coincide with the paramter 'names.delim' and 'names.field', CreateNichCon object may fail to create.
 
 2. **min.feature**
 
@@ -138,8 +133,7 @@ mt <- TransCommuProfile(mt,
                           IS_core = TRUE,
                           Org = 'Homo sapiens')
 ```
-
-<br />What's new in the **NichConObject after **TransCommuProfile function**？Please refer to the part 3.1 for more detailed information.**
+What's new in the **NichConObject after **TransCommuProfile function**？Please refer to the part 3.1 for more detailed information.**
 
 | **slot** | **detail** |
 | --- | --- |
@@ -163,17 +157,14 @@ mt <- TransCommuProfile(mt,
 
 <a name="4d1f704f"></a>
 #### 2.2.1 overveiw in circle plot
-
-<br />set the color of each cell type<br />
-
+set the color of each cell type
 ```
   cell_color <- data.frame(color=c('#e31a1c','#1f78b4',
                                    '#e78ac3','#ff7f00'), stringsAsFactors = FALSE)
   rownames(cell_color) <- c("SSC", "SPGing", "SPGed", "ST")
 ```
 
-<br />plot circle with cellcall object<br />
-
+<br />plot circle with cellcall object
 ```
 ViewInterCircos(object = mt, font = 2, cellColor = cell_color, lrColor = c("#F16B6F", "#84B1ED"),
                   arr.type = "big.arrow",arr.length = 0.04,
@@ -182,8 +173,7 @@ ViewInterCircos(object = mt, font = 2, cellColor = cell_color, lrColor = c("#F16
                   trackhight2 = 0.032, track.margin2 = c(0.01,0.12), DIY = FALSE)
 ```
 
-<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168608941-00510457-8fa4-425e-bb73-57b1c8718f01.png#align=left&display=inline&height=475&margin=%5Bobject%20Object%5D&name=image.png&originHeight=475&originWidth=559&size=74933&status=done&style=none&width=559#id=Z16r5&originHeight=475&originWidth=559&originalType=binary&status=done&style=none)<br />plot circle with DIY dataframe of mt@data$expr_l_r_log2_scale<br />
-
+<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168608941-00510457-8fa4-425e-bb73-57b1c8718f01.png#align=left&display=inline&height=475&margin=%5Bobject%20Object%5D&name=image.png&originHeight=475&originWidth=559&size=74933&status=done&style=none&width=559#id=Z16r5&originHeight=475&originWidth=559&originalType=binary&ratio=1&status=done&style=none)<br />plot circle with DIY dataframe of mt@data$expr_l_r_log2_scale
 ```
   ViewInterCircos(object = mt@data$expr_l_r_log2_scale, font = 2, cellColor = cell_color,
                   lrColor = c("#F16B6F", "#84B1ED"),
@@ -193,12 +183,10 @@ ViewInterCircos(object = mt, font = 2, cellColor = cell_color, lrColor = c("#F16
                   trackhight2 = 0.032, track.margin2 = c(0.01,0.12), DIY = T)
 ```
 
-<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168681351-261eaa95-e761-4f08-9e2f-76462fa223b4.png#align=left&display=inline&height=452&margin=%5Bobject%20Object%5D&name=image.png&originHeight=452&originWidth=534&size=72472&status=done&style=none&width=534#id=tqJ8P&originHeight=452&originWidth=534&originalType=binary&status=done&style=none)<br />
+<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168681351-261eaa95-e761-4f08-9e2f-76462fa223b4.png#align=left&display=inline&height=452&margin=%5Bobject%20Object%5D&name=image.png&originHeight=452&originWidth=534&size=72472&status=done&style=none&width=534#id=tqJ8P&originHeight=452&originWidth=534&originalType=binary&ratio=1&status=done&style=none)<br />
 
 <a name="c2fcc6f5"></a>
 #### 2.2.2 overveiw in pheatmap plot
-
-
 ```
 viewPheatmap(object = mt, slot="expr_l_r_log2_scale", show_rownames = T,show_colnames = T,
              treeheight_row=0, treeheight_col=10,
@@ -206,12 +194,11 @@ viewPheatmap(object = mt, slot="expr_l_r_log2_scale", show_rownames = T,show_col
              main="score")
 ```
 
-<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168729707-830a042f-afbd-4a67-a0fa-f3804abc6aac.png#align=left&display=inline&height=477&margin=%5Bobject%20Object%5D&name=image.png&originHeight=477&originWidth=1185&size=112516&status=done&style=none&width=1185#id=EJbnc&originHeight=477&originWidth=1185&originalType=binary&status=done&style=none)<br />
+<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168729707-830a042f-afbd-4a67-a0fa-f3804abc6aac.png#align=left&display=inline&height=477&margin=%5Bobject%20Object%5D&name=image.png&originHeight=477&originWidth=1185&size=112516&status=done&style=none&width=1185#id=EJbnc&originHeight=477&originWidth=1185&originalType=binary&ratio=1&status=done&style=none)<br />
 
 <a name="b101b966"></a>
 #### 2.2.3 inspect Ligand-Receptor-TF in specific cellA-cellB
-
-<br />There are three types to show this triple relation.<br />Funtion LR2TF to measure the triple relation between specific cells.<br />
+There are three types to show this triple relation.<br />Funtion LR2TF to measure the triple relation between specific cells.<br />
 
 ```
   mt <- LR2TF(object = mt, sender_cell="ST", recevier_cell="SSC",
@@ -219,8 +206,7 @@ viewPheatmap(object = mt, slot="expr_l_r_log2_scale", show_rownames = T,show_col
   head(mt@reductions$sankey)
 ```
 
-<br />First type, function LRT.Dimplot.<br />
-
+<br />First type, function LRT.Dimplot.
 ```
   if(!require(networkD3)){
   		BiocManager::install("networkD3")
@@ -230,7 +216,7 @@ viewPheatmap(object = mt, slot="expr_l_r_log2_scale", show_rownames = T,show_col
   networkD3::saveNetwork(sank, "~/ST-SSC_full.html")
 ```
 
-<br />The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with ligand and receptor respectively.<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608037011420-8a08e2c5-73f0-4d9a-bc49-87119980fcda.png#align=left&display=inline&height=287&margin=%5Bobject%20Object%5D&name=image.png&originHeight=714&originWidth=1855&size=282995&status=done&style=none&width=746#id=WOHOu&originHeight=714&originWidth=1855&originalType=binary&status=done&style=none)
+<br />The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with ligand and receptor respectively.<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608037011420-8a08e2c5-73f0-4d9a-bc49-87119980fcda.png#align=left&display=inline&height=287&margin=%5Bobject%20Object%5D&name=image.png&originHeight=714&originWidth=1855&size=282995&status=done&style=none&width=746#id=WOHOu&originHeight=714&originWidth=1855&originalType=binary&ratio=1&status=done&style=none)
 
 ---
 
@@ -256,7 +242,7 @@ sankey_graph(df = tmp.df, axes=1:3, mycol = mycol.vector.list[1:elments.num], nu
 font.size = 4, boder.col="white", isGrandSon = F)
 ```
 
-<br />The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with ligand and receptor respectively.<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168925812-ab05a489-d7f4-497f-b517-939486808a11.png#align=left&display=inline&height=488&margin=%5Bobject%20Object%5D&name=image.png&originHeight=488&originWidth=547&size=183644&status=done&style=none&width=547#id=sLu3g&originHeight=488&originWidth=547&originalType=binary&status=done&style=none)
+<br />The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with ligand and receptor respectively.<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1612168925812-ab05a489-d7f4-497f-b517-939486808a11.png#align=left&display=inline&height=488&margin=%5Bobject%20Object%5D&name=image.png&originHeight=488&originWidth=547&size=183644&status=done&style=none&width=547#id=sLu3g&originHeight=488&originWidth=547&originalType=binary&ratio=1&status=done&style=none)
 
 ---
 
@@ -278,12 +264,11 @@ sankey_graph(df = tmp.df, axes=1:3, mycol = mycol.vector.list[1:elments.num], is
               nudge_x = nudge_x, font.size = 2, boder.col="white", set_alpha = 0.8)
 ```
 
-<br />The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with one node (ligand or receptor).<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608038695456-2ce50409-aaf1-4484-bfda-bde39ec7738f.png#align=left&display=inline&height=562&margin=%5Bobject%20Object%5D&name=image.png&originHeight=562&originWidth=1025&size=322055&status=done&style=none&width=1025#id=I8hDo&originHeight=562&originWidth=1025&originalType=binary&status=done&style=none)<br />
+<br />The first pillar is ligand，the second pillar is receptor，the last pillar is tf.<br />And the color of left and right flow is consistent with one node (ligand or receptor).<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608038695456-2ce50409-aaf1-4484-bfda-bde39ec7738f.png#align=left&display=inline&height=562&margin=%5Bobject%20Object%5D&name=image.png&originHeight=562&originWidth=1025&size=322055&status=done&style=none&width=1025#id=I8hDo&originHeight=562&originWidth=1025&originalType=binary&ratio=1&status=done&style=none)<br />
 
 <a name="5e449248"></a>
 ### 2.3 enrichment in pathway
-
-<br />getHyperPathway to perform enrichment, getForBubble to merge data for graph and plotBubble produce the bubble plot.<br />
+getHyperPathway to perform enrichment, getForBubble to merge data for graph and plotBubble produce the bubble plot.<br />
 
 ```
 n <- mt@data$expr_l_r_log2_scale
@@ -298,16 +283,13 @@ myPub.df <- getForBubble(pathway.hyper.list, cella_cellb=colnames(n))
 p <- plotBubble(myPub.df)
 ```
 
-<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608044718538-54a82161-c714-4389-80f9-e715429c0754.png#align=left&display=inline&height=685&margin=%5Bobject%20Object%5D&name=image.png&originHeight=685&originWidth=1047&size=161481&status=done&style=none&width=1047#id=YbZcY&originHeight=685&originWidth=1047&originalType=binary&status=done&style=none)<br />
+<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608044718538-54a82161-c714-4389-80f9-e715429c0754.png#align=left&display=inline&height=685&margin=%5Bobject%20Object%5D&name=image.png&originHeight=685&originWidth=1047&size=161481&status=done&style=none&width=1047#id=YbZcY&originHeight=685&originWidth=1047&originalType=binary&ratio=1&status=done&style=none)<br />
 
 <a name="ac88ba82"></a>
 ### 2.4 activation of TF in receiver cell
-
-
 <a name="8431efc8"></a>
 #### 2.4.1 ridge plot
-
-<br />plot enrichment result of TF (filter or not).<br />
+plot enrichment result of TF (filter or not).<br />
 
 ```
 ## gsea object
@@ -322,18 +304,16 @@ ridgeplot.DIY(x=egmt, fill="p.adjust", showCategory=flag.index, core_enrichment 
                 orderBy = "NES", decreasing = FALSE)
 ```
 
-<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608099926349-53777dc6-352b-484e-a3a2-9a4c519906a1.png#align=left&display=inline&height=686&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=688&size=117664&status=done&style=none&width=688#id=unTPP&originHeight=686&originWidth=688&originalType=binary&status=done&style=none)<br />
+<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608099926349-53777dc6-352b-484e-a3a2-9a4c519906a1.png#align=left&display=inline&height=686&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=688&size=117664&status=done&style=none&width=688#id=unTPP&originHeight=686&originWidth=688&originalType=binary&ratio=1&status=done&style=none)<br />
 
 <a name="e4de6250"></a>
 #### 2.4.2 gsea plot
-
-
 ```
   ssc.tf <- names(mt@data$gsea.list$SSC@geneSets)
   ssc.tf
 ```
 
-<br />Show all TF have result in the SSC.<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608100011863-2c349ce5-f197-4528-a167-2eec6004524c.png#align=left&display=inline&height=122&margin=%5Bobject%20Object%5D&name=image.png&originHeight=122&originWidth=1317&size=19698&status=done&style=none&width=1317#id=Zcli0&originHeight=122&originWidth=1317&originalType=binary&status=done&style=none)<br />
+<br />Show all TF have result in the SSC.<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608100011863-2c349ce5-f197-4528-a167-2eec6004524c.png#align=left&display=inline&height=122&margin=%5Bobject%20Object%5D&name=image.png&originHeight=122&originWidth=1317&size=19698&status=done&style=none&width=1317#id=Zcli0&originHeight=122&originWidth=1317&originalType=binary&ratio=1&status=done&style=none)<br />
 
 ```
   getGSEAplot(gsea.list=mt@data$gsea.list, geneSetID=c("CREBBP", "ESR1", "FOXO3"), myCelltype="SSC",
@@ -341,7 +321,7 @@ ridgeplot.DIY(x=egmt, fill="p.adjust", showCategory=flag.index, core_enrichment 
               mycol = NULL)
 ```
 
-<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608100142219-a62cfef9-fe81-4a2e-8222-73d30770a122.png#align=left&display=inline&height=682&margin=%5Bobject%20Object%5D&name=image.png&originHeight=682&originWidth=692&size=75484&status=done&style=none&width=692#id=wOTtk&originHeight=682&originWidth=692&originalType=binary&status=done&style=none)<br />
+<br />![image.png](https://cdn.nlark.com/yuque/0/2020/png/1705105/1608100142219-a62cfef9-fe81-4a2e-8222-73d30770a122.png#align=left&display=inline&height=682&margin=%5Bobject%20Object%5D&name=image.png&originHeight=682&originWidth=692&size=75484&status=done&style=none&width=692#id=wOTtk&originHeight=682&originWidth=692&originalType=binary&ratio=1&status=done&style=none)<br />
 
 <a name="e56ue"></a>
 ## 3. Structure of S4 object
@@ -371,7 +351,7 @@ For some biologists, they pay more attention to the TGs of the TF. This tool pro
 ```r
 mt@data$gsea.list$SSC@geneSets
 ```
-The figure presents a part of result stored in the NichConObject@data$gsea.list$cell_type@geneSets.<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1622793918329-07ac2149-03ff-4243-ba2f-06345a112b69.png#clientId=uc7e6a175-7c8e-4&from=paste&height=235&id=ud5973156&margin=%5Bobject%20Object%5D&name=image.png&originHeight=469&originWidth=980&originalType=binary&size=114458&status=done&style=none&taskId=u62af5ea2-5c00-4ce1-8da3-2dac8a7047a&width=490)<br />​<br />
+The figure presents a part of result stored in the NichConObject@data$gsea.list$cell_type@geneSets.<br />![image.png](https://cdn.nlark.com/yuque/0/2021/png/1705105/1622793918329-07ac2149-03ff-4243-ba2f-06345a112b69.png#clientId=uc7e6a175-7c8e-4&from=paste&height=235&id=ud5973156&margin=%5Bobject%20Object%5D&name=image.png&originHeight=469&originWidth=980&originalType=binary&ratio=1&size=114458&status=done&style=none&taskId=u62af5ea2-5c00-4ce1-8da3-2dac8a7047a&width=490)<br />​<br />
 <a name="b4d8b003"></a>
 ## 4. My session info
 
