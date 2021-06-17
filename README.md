@@ -202,8 +202,8 @@ Plotting circle with DIY dataframe of mt@data$expr_l_r_log2_scale:
 | **Arguments** | **Detail** |
 | --- | --- |
 | **object** | A Cellcall S4 object, the result of function CreateNichConObject() and TransCommuProfile(). |
-| **font	** | The size of font. |
-| **cellColor	** | A color dataframe, rownames is cell type, value is color. |
+| **font** | The size of font. |
+| **cellColor** | A color dataframe, rownames is cell type, value is color. |
 | **lrColor** | A color vector denotes the color of ligand and receptor, containing two elements, default is c('#D92E27', "#35C6F4"). |
 | **order.vector** | Default is null, a celltype vector with the order you want in the circle graph. |
 | **trackhight1** | Height of the outer track. |
