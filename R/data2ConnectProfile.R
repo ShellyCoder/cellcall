@@ -103,7 +103,7 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
   detect_gene <- rownames(expr_set)
   # expr_set[1:4,1:4]
 
-  ### 计算每个细胞类型的 gene 中位数
+  ### 计算每个细胞类型的gene
   print("step1: compute means of gene")
   expr_mean <- matrix(nrow = nrow(expr_set), ncol = length(cell_type))
   myColnames <- c()
@@ -136,6 +136,8 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
   if(use.type=="median"){
     # fc.list <- mylog2foldChange(inData = expr.fc, cell.type = cell_type, method="mean", probs = probs)
     fc.list <- mylog2foldChange.diy(inData = expr.fc, cell.type = cell_type, method="median", probs = probs)
+  }else{
+    fc.list <- mylog2foldChange.diy(inData = expr.fc, cell.type = cell_type, method="mean", probs = probs)
   }
 
   #  tf -> spearson cor ( first filter) -> gsea enrich testing targets trend of expression
