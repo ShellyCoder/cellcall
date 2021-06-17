@@ -408,7 +408,7 @@ test <- CreateObject_fromSeurat(Seurat.object=Seurat.object,
                                 scale.factor = 10^6, 
                                 Org = "Homo sapiens")
 ```
-**Arguments: **
+**Arguments:**
 
 | **Arguments** | **Detail** |
 | --- | --- |
@@ -417,7 +417,7 @@ test <- CreateObject_fromSeurat(Seurat.object=Seurat.object,
 | **cell_type** | The name of specific column which contains cell type information, default "orig.ident". |
 | **data_source** | The type of expression dataframe, eg "UMI", "fullLength", "TPM", or "CPM". |
 | **scale.factor** | Sets the scale factor for cell-level normalization, default "10^6". The parameter is only for "UMI" or "fullLength", otherwise it doesn't work. |
-| **Org ** | Set the species source of gene, eg "Homo sapiens", "Mus musculus". This decide which ligand-receptor reference dataset be used. |
+| **Org** | Set the species source of gene, eg "Homo sapiens", "Mus musculus". This decide which ligand-receptor reference dataset be used. |
 
 <a name="e56ue"></a>
 ## 3. Structure of S4 object
@@ -433,7 +433,7 @@ More detailed results in the intermediate process are stored in the S4 object of
 | **expr_mean** | The mean value of gene in different cell |
 | **regulons_matrix** | The normalized enrichment value of tanscriptional factor in different cell |
 | **gsea.list** | The enrichment result and target genes of tanscriptional factor in different cell |
-| **fc.list ** | The fold change value between specific cell type and others |
+| **fc.list** | The fold change value between specific cell type and others |
 | **expr_r_regulons** | The sum value of normalized enrichment value of tanscriptional factor downstreaming specific receptor |
 | **softmax_ligand** | Softmax value of the ligand expression across all cell types |
 | **softmax_receptor** | Softmax value of the receptor expression across all cell types |
@@ -446,7 +446,7 @@ More detailed results in the intermediate process are stored in the S4 object of
 | --- | --- |
 | **sampleID** | The cell id of all cell. |
 | **celltype** | The metadata of cell type information. |
-| **nFeature ** | The number of gene which value is greater than 0 in every cell. |
+| **nFeature** | The number of gene which value is greater than 0 in every cell. |
 | **nCounts** | The sum of expression value in every cell. |
 
 <a name="X7o5u"></a>
