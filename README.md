@@ -4,6 +4,8 @@
 
 <a name="adf749d9"></a>
 ## Updated information of CellCall
+<a name="58715c1b"></a>
+#### 2021/06/25 -- Update the manual more comprehensively.
 <a name="58715c1a"></a>
 #### 2021/04/15 -- Update the function getHyperPathway.
 <a name="9b526a59"></a>
