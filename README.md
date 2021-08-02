@@ -4,6 +4,8 @@
 
 <a name="adf749d9"></a>
 ## Updated information of CellCall
+<a name="58715c1d"></a>
+#### 2021/08/02 -- Please cite us with doi: 10.1093/nar/gkab638, https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkab638/6332819.
 <a name="58715c1b"></a>
 #### 2021/06/25 -- Update the manual more comprehensively.
 <a name="58715c1a"></a>
