@@ -121,7 +121,7 @@ mt <- TransCommuProfile(object = mt,
 | **topTargetCor** | Set the rank of candidate genes which has firlter by spearson Correlation, default is 1, that means 100% filtered candidate genes will be used. |
 | **p.adjust** | Set the threshold of regulons's GSEA pValue which adjusted by Benjamini & Hochberg, default is 0.05. |
 | **use.type** | With parameter "median", CellCall set the mean value of gene as zero, when the percentile of gene expression in one celltype below the parameter "probs". The other choice is "mean" and means that we not concern about the percentile of gene expression in one celltype but directly use the mean value. |
-| **probs** | Set the percentile of gene expression in one celltype to represent mean value, when use the "median" method to compute mean value. |
+| **probs** | Set the percentile of gene expression in one celltype to represent mean value, when use.type="median". |
 | **method** | Choose the proper method to score downstream activation of all regulons of given ligand-receptor relation. Candidate values are "weighted", "max", "mean", of which "weighted" is default. |
 | **Org** | Choose the dataset source of this project, eg "Homo sapiens", "Mus musculus". |
 | **IS_core** | Logical variable, whether use core reference LR data with high confidence or include extended datasets on the basis of core reference. |
