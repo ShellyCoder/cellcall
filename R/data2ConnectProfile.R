@@ -1,7 +1,7 @@
 #' create a Cellwave objects
 #' @param object a Cellwave objects
-#' @param probs Percentile of gene expression in one cell type to represents this cell type
-#' @param use.type the type of compute, default is "median"
+#' @param probs Set the percentile of gene expression in one celltype to represent mean value, when use.type="median".
+#' @param use.type With parameter "median", CellCall set the mean value of gene as zero, when the percentile of gene expression in one celltype below the parameter "probs". The other choice is "mean" and means that we not concern about the percentile of gene expression in one celltype but directly use the mean value.
 #' @param pValueCor firlter target gene of TF with spearson, p > pValueCor, default is 0.05
 #' @param CorValue firlter target gene of TF with spearson, value > CorValue, default is 0.1
 #' @param topTargetCor use topTargetCor of candidate genes which has firlter by above parameters, default is 1, means 100%
@@ -17,7 +17,7 @@
 #' @importFrom utils read.table head
 #' @export
 
-ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1, method="weighted", p.adjust=0.05, use.type="median", probs = 0.75, Org = 'Homo sapiens', IS_core = TRUE){
+ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1, method="weighted", p.adjust=0.05, use.type="median", probs = 0.9, Org = 'Homo sapiens', IS_core = TRUE){
   Sys.setenv(R_MAX_NUM_DLLS=999) ##Sys.setenv, 修改环境设置，R的namespace是有上限的，如果导入包时超过这个上次就会报错,R_MAX_NUM_DLLS可以修改这个上限
   options(stringsAsFactors = F) ##options:允许用户对工作空间进行全局设置，stringsAsFactors防止R自动把字符串string的列辨认成factor
 
