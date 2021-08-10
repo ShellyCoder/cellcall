@@ -11,7 +11,7 @@ TransCommuProfile(
   topTargetCor = 1,
   p.adjust = 0.05,
   use.type = "median",
-  probs = 0.75,
+  probs = 0.9,
   method = "weighted",
   Org = "Homo sapiens",
   IS_core = TRUE
