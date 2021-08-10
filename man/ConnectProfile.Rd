@@ -12,7 +12,7 @@ ConnectProfile(
   method = "weighted",
   p.adjust = 0.05,
   use.type = "median",
-  probs = 0.75,
+  probs = 0.9,
   Org = "Homo sapiens",
   IS_core = TRUE
 )
@@ -30,9 +30,9 @@ ConnectProfile(
 
 \item{p.adjust}{gsea pValue of regulons with BH adjusted threshold, default is 0.05}
 
-\item{use.type}{the type of compute, default is "median"}
+\item{use.type}{With parameter "median", CellCall set the mean value of gene as zero, when the percentile of gene expression in one celltype below the parameter "probs". The other choice is "mean" and means that we not concern about the percentile of gene expression in one celltype but directly use the mean value.}
 
-\item{probs}{Percentile of gene expression in one cell type to represents this cell type}
+\item{probs}{	Set the percentile of gene expression in one celltype to represent mean value, when use.type="median".}
 
 \item{Org}{choose the species source of gene, eg "Homo sapiens", "Mus musculus"}
 
