@@ -21,17 +21,17 @@ CreateObject_fromSeurat <- function(Seurat.object, slot="counts",
   if(is_Seurat){
     if(require(Seurat)){
       
-      tryCatch({
+      #tryCatch({
         data <-  as.matrix(Seurat::GetAssayData(object = Seurat.object, slot = slot, assay = "RNA"))
-      },error=function(e){
-        stop("there is no slot: ", slot," in your seurat object in RNA assay")
-      })
+      #},error=function(e){
+      #  stop("there is no slot: ", slot," in your seurat object in RNA assay")
+      #})
       
-      tryCatch({
+      #tryCatch({
         myCelltype <- as.character(Seurat.object@meta.data[,cell_type])
-      },error=function(e){
-        stop("there is no columns: ", cell_type," in meta.data of Seurat.")
-      })
+      #},error=function(e){
+      #  stop("there is no columns: ", cell_type," in meta.data of Seurat.")
+      #})
       
       data <- as.data.frame(data)
       colnames(data) <- paste(1:length(myCelltype), myCelltype, sep = "_")
