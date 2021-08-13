@@ -29,9 +29,7 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
                             arr.type = "big.arrow",arr.length = 0.04, DIY = TRUE, gap.degree = NULL,
                             trackhight2 = 0.032, track.margin2 = c(0.01,0.12),slot="expr_l_r_log2_scale")
 {
-  # library(circlize)
-  # library(gridBase)
-  # library(ComplexHeatmap)
+
   plot.new()
   circle_size = unit(1, "snpc") # snpc unit gives you a square region
   pushViewport(viewport(x = 0, y = 0.5, width = circle_size, height = circle_size,
@@ -39,8 +37,8 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
   par(omi = gridOMI(), new = TRUE)
 
 
-  circos.clear()  #这个命令用于清空画布，画错时要运行此命令重新再画。
-  # 整体布局
+  circos.clear()  
+
   # cell.padding: the padding between sector and other sector
 
   if(is.null(gap.degree)){
@@ -93,9 +91,8 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
 
     fa = factor(fa,levels = my.levels)
   }
-  circos.initialize(factors = fa, xlim = c(0,1)) # 初始化
+  circos.initialize(factors = fa, xlim = c(0,1)) # 
 
-  # 第1圈 细胞类型
   circos.trackPlotRegion(
     ylim = c(0, 1),
     track.height = trackhight1,
@@ -110,9 +107,6 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
     }
   )
 
-  # ab_tmp <- ab_tmp[-which(ab_tmp$arrowType=="white"),]
-  # cell
-  # cell_color: 随机生成颜色，给每个细胞类型
   if(is.null(cellColor)){
     cell_color <- data.frame(color = rand_color(length(unique(ab_tmp$celltype)), luminosity = "light"), stringsAsFactors = FALSE)
     rownames(cell_color) <- unique(ab_tmp$celltype)
@@ -129,8 +123,6 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
 
   }
 
-
-  #第2圈 配体受体
   circos.trackPlotRegion(
     ylim = c(0, 1),
     track.height = trackhight2,
@@ -170,7 +162,6 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
   }
 
 
-  ### 第2-3圈，连线
   test$weighted_n <- (test$n-min(test$n))/(max(test$n)-min(test$n))
   test <- test[order(test$weighted_n, decreasing = F),]
   # print(test$weighted_n)
@@ -186,7 +177,6 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
       col_fun = colorRamp2(c(0, 1), c("#FFFFFF", x))
     })
 
-    # 设置每条线的颜色，和它源自的细胞类型一致
     for(i in 1:nrow(test)){
       my_Line_color = as.character(cell_color[test[i,1],1])
       print(test$weighted_n[i])
@@ -194,7 +184,6 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
                   point1 = c(0,1),
                   sector.index2 = test[i,'id2'],
                   point2 = c(0,1),
-                  #连线的方向，1=第一列到第二列，2=双方向，-1=第二列到第一列，0=无方向
                   directional = 1,
                   arr.type = arr.type,
                   # arr.width = 0,
@@ -237,7 +226,6 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
       col_fun = colorRamp2(c(0, 1), c("#FFFFFF", "#f349eb"))
     }
 
-    # 设置每条线的颜色，和它源自的细胞类型一致
     for(i in 1:nrow(test)){
       my_Line_color = as.character(cell_color[test[i,1],1])
       print(test$weighted_n[i])
@@ -245,7 +233,6 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
                   point1 = c(0,1),
                   sector.index2 = test[i,'id2'],
                   point2 = c(0,1),
-                  #连线的方向，1=第一列到第二列，2=双方向，-1=第二列到第一列，0=无方向
                   directional = 1,
                   arr.type = arr.type,
                   # arr.width = 0,
