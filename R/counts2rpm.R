@@ -15,10 +15,8 @@ counts2normalized_smartseq2 <- function(data, Org, toType, scale.factor=10^6){
   # head(g_l)
   a <- data
   a[1:4,1:4]
-  ng=intersect(rownames(a),g_l$symbol) #取a数据框的行名与g_l数据框的symbol列的交集
-  #intersect()取交集
+  ng=intersect(rownames(a),g_l$symbol) 
 
-  # 有了counts矩阵和对应的基因长度信息，就很容易进行各种计算了：
   exprSet=a[ng,]
   lengths=g_l[match(ng,g_l$symbol),2]
   head(lengths)
