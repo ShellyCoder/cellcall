@@ -28,8 +28,6 @@ TransCommuProfile <- function(object,
 {
     is_myObject <- is(object, "CellInter")
     if(is_myObject){
-      # print(getwd())
-      # source("./myProject/code/project/data2ConnectProfile.R")
       profile <- ConnectProfile(object,
                      pValueCor = pValueCor,
                      CorValue = CorValue,
