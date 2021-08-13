@@ -13,15 +13,12 @@
 
 sankey_graph <- function(df, axes, mycol=NULL, nudge_x=NULL, font.size=5,
                          boder.col = "black", isGrandSon = FALSE, set_alpha = 1){
-  # df <- read.table("easy_input1.txt",sep = "\t",row.names = 1,header = T)
-  # library(ggalluvial)
-  ## Loading required package: ggplot2
-  Sys.setenv(LANGUAGE = "en") #显示英文报错信息
-  options(stringsAsFactors = FALSE) #禁止chr转成factor
+
+  options(stringsAsFactors = FALSE)
   diy_stratum <- ggalluvial::StatStratum
 
 if(isGrandSon){
-  # 输入的df是已经计算好的频率的矩阵
+  
   subdf <- df
   colnames(subdf) <- c("Ligand_symbol", "Receptor_symbol", "TF", "value")
   subdf <- as.data.frame(subdf)
@@ -31,14 +28,14 @@ if(isGrandSon){
                 aes(y = value,
                     axis1 = Ligand_symbol,
                     axis2 = Receptor_symbol,
-                    axis3 = TF)) + #这里画三列，如果有更多列，就继续添加，例如axis4 = 列名
+                    axis3 = TF)) +
       ggalluvial::geom_flow(stat = "alluvium",width = 1/8,aes(fill = Ligand_symbol), alpha=set_alpha) +
       ggalluvial::geom_stratum(width = 1/8, reverse = T,alpha = .9, size =0.001) +
       geom_text(stat = diy_stratum, size = font.size, aes(label = after_stat(stratum)),
                 reverse = T) +
       scale_x_continuous(breaks = 1:3, labels = c("Ligand", "Receptor", "TF")) +
 
-      theme(legend.position = "bottom", #底部画图例
+      theme(legend.position = "bottom",
             legend.title = element_blank(),
             axis.title.x = element_blank(),
             axis.title.y = element_blank(),
@@ -47,18 +44,18 @@ if(isGrandSon){
             axis.text.x = element_text(size = font.size, face = "bold", color = "black")) +
 
       xlab("") + ylab("") +
-      theme_bw() + #去除背景色
-      theme(panel.grid =element_blank()) + #去除网格线
-      theme(panel.border = element_blank()) + #去除外层边框
-      theme(axis.line = element_blank(),axis.ticks = element_blank(), #不画xy轴
-            axis.text.y = element_blank()) + # 只保留x轴label
+      theme_bw() +
+      theme(panel.grid =element_blank()) +
+      theme(panel.border = element_blank()) + 
+      theme(axis.line = element_blank(),axis.ticks = element_blank(),
+            axis.text.y = element_blank()) + 
       ggtitle("")
   }else{
     p <- ggplot(as.data.frame(subdf),
                 aes(y = value,
                     axis1 = Ligand_symbol,
                     axis2 = Receptor_symbol,
-                    axis3 = TF)) + #这里画三列，如果有更多列，就继续添加，例如axis4 = 列名
+                    axis3 = TF)) + 
       scale_fill_manual(values = mycol) +
       ggalluvial::geom_flow(stat = "alluvium",width = 1/8,aes(fill = Ligand_symbol), alpha=set_alpha) +
       ggalluvial::geom_stratum(width = 1/8, reverse = T,alpha = .9, size =0.001) +
@@ -66,7 +63,7 @@ if(isGrandSon){
                 reverse = T) +
       scale_x_continuous(breaks = 1:3, labels = c("Ligand", "Receptor", "TF")) +
 
-      theme(legend.position = "bottom", #底部画图例
+      theme(legend.position = "bottom", 
             legend.title = element_blank(),
             axis.title.x = element_blank(),
             axis.title.y = element_blank(),
@@ -75,36 +72,31 @@ if(isGrandSon){
             axis.text.x = element_text(size = font.size, face = "bold", color = "black")) +
 
       xlab("") + ylab("") +
-      theme_bw() + #去除背景色
-      theme(panel.grid =element_blank()) + #去除网格线
-      theme(panel.border = element_blank()) + #去除外层边框
-      theme(axis.line = element_blank(),axis.ticks = element_blank(), #不画xy轴
-            axis.text.y = element_blank()) + # 只保留x轴label
+      theme_bw() + 
+      theme(panel.grid =element_blank()) +
+      theme(panel.border = element_blank()) + 
+      theme(axis.line = element_blank(),axis.ticks = element_blank(), 
+            axis.text.y = element_blank()) + 
       ggtitle("")
   }
 
 }else{
-  #格式转换
   UCB_lodes <- to_lodes_form(df[,1:ncol(df)],
                              axes = axes,
                              id = "Cohort")
-  # dim(UCB_lodes)
-  #
-  # head(UCB_lodes)
-  # tail(UCB_lodes)
 
   if(is.null(mycol)){
     p<-ggplot(UCB_lodes,
               aes(x = x, stratum = stratum, alluvium = Cohort,
                   fill = stratum, label = stratum)) +
       scale_x_discrete(expand = c(0, 0)) +
-      ggalluvial::geom_flow(width = 1/8, alpha=set_alpha) + #线跟方块间空隙的宽窄
-      ggalluvial::geom_stratum(alpha = .9,width = 1/6, size =0.001, color = boder.col) + #方块的透明度、宽度
+      ggalluvial::geom_flow(width = 1/8, alpha=set_alpha) + 
+      ggalluvial::geom_stratum(alpha = .9,width = 1/6, size =0.001, color = boder.col) + 
       xlab("") + ylab("") +
-      theme_bw() + #去除背景色
-      theme(panel.grid =element_blank()) + #去除网格线
-      theme(panel.border = element_blank()) + #去除外层边框
-      theme(axis.line = element_blank(),axis.ticks = element_blank(),axis.text = element_blank()) + #去掉坐标轴
+      theme_bw() + 
+      theme(panel.grid =element_blank()) + 
+      theme(panel.border = element_blank()) + 
+      theme(axis.line = element_blank(),axis.ticks = element_blank(),axis.text = element_blank()) +
       ggtitle("")+
       guides(fill = FALSE)
   }else{
@@ -112,30 +104,24 @@ if(isGrandSon){
               aes(x = x, stratum = stratum, alluvium = Cohort,
                   fill = stratum, label = stratum)) +
       scale_x_discrete(expand = c(0, 0)) +
-      ggalluvial::geom_flow(width = 1/8, alpha=set_alpha) + #线跟方块间空隙的宽窄
-      ggalluvial::geom_stratum(alpha = .9,width = 1/6, size =0.001, color = boder.col) + #方块的透明度、宽度
+      ggalluvial::geom_flow(width = 1/8, alpha=set_alpha) +
+      ggalluvial::geom_stratum(alpha = .9,width = 1/6, size =0.001, color = boder.col) + 
 
-      #不喜欢默认的配色方案，用前面自己写的配色方案
       scale_fill_manual(values = mycol) +
 
       xlab("") + ylab("") +
-      theme_bw() + #去除背景色
-      theme(panel.grid =element_blank()) + #去除网格线
-      theme(panel.border = element_blank()) + #去除外层边框
-      theme(axis.line = element_blank(),axis.ticks = element_blank(),axis.text = element_blank()) + #去掉坐标轴
+      theme_bw() + 
+      theme(panel.grid =element_blank()) +
+      theme(panel.border = element_blank()) +
+      theme(axis.line = element_blank(),axis.ticks = element_blank(),axis.text = element_blank()) + 
       ggtitle("")+
       guides(fill = FALSE)
   }
 
   if(is.null(nudge_x)){
-    p <- p + geom_text(stat = diy_stratum, size = font.size, color="black") #文字大小、颜色
+    p <- p + geom_text(stat = diy_stratum, size = font.size, color="black")
   }else{
-    # library(ggrepel)
-    # p <- p + geom_label_repel(data = UCB_lodes, stat = "stratum", aes(label=stratum, fill = stratum),
-    #                     fontface="bold", color="white", box.padding=unit(0.35, "lines"),
-    #                     point.padding=unit(0.5, "lines"), size=font.size, nudge_x=nudge_x)
     p <- p + geom_text(stat = diy_stratum, size = font.size, color="black", vjust="right", nudge_x=nudge_x)
-
   }
 }
   return(p)
