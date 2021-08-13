@@ -21,8 +21,8 @@ TransCommuProfile <- function(object,
                               p.adjust=0.05,
                               use.type="median",
                               probs = 0.75,
-                              method="weighted",   # "weighted", "max", "mean"
-                              Org = 'Homo sapiens', # default, human
+                              method="weighted",  
+                              Org = 'Homo sapiens', 
                               IS_core = TRUE
                               )
 {
