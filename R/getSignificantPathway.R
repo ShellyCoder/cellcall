@@ -15,8 +15,7 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
   n<- data
   Org <- Org
   mt <- object
-  # library(stringr)
-  ## 统计每条通路中涉及到的三元关系
+
   if(Org == 'Homo sapiens'){
     f.tmp <- system.file("extdata", "new_ligand_receptor_TFs.txt", package="cellcall")
     triple_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
@@ -53,8 +52,6 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
   })
   path.triple.tmp.df <- do.call(rbind, list.tmp)
 
-
-  ## 统计每个细胞间存在的三元关系
   path.list.tmp <- lapply(rownames(n), function(x){
     names.tmp <- colnames(n)[n[x,]>0]
 
@@ -96,15 +93,12 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
     return(res.df)
   }
 
-  ## 计算cc.tmp涉及到每个通路的超几何P值
-  ## 预先定义好函数
   myHypergeometric <- function(intersect_mirna=intersect_mirna, mrna_has_mirna=mrna_has_mirna, all_mirna=all_mirna, lncrna_has_mirna=lncrna_has_mirna){
-    q = intersect_mirna-1 # 抽到的白球个数-1，这里就是lncRNA和mrna共有miRNA个数-1，
-    # 减1的原因这里算的是累计概率值，然后设置lower.tail = FALSE，最后得到的（1-累计概率值）
-    m = mrna_has_mirna    # 白球的个数，这里就是具体某一个mrna拥有的miRNA个数
-    n = all_mirna-mrna_has_mirna # 黑球的个数，这里就是所有的miRNA-具体某一个mrna拥有的miRNA个数,这里的所有miRNA其实就是背景miRNA的个数
-    k = lncrna_has_mirna  # 从球袋里面无放回的拿球的个数，这里就是具体某一个lncRNA拥有的miRNA个数
-    stats::phyper(q=q, m=m, n=n, k=k, log = FALSE, lower.tail = FALSE) # lower.tail = FALSE使得最后结果是（1-累计概率值）,也就是P[X > q],也就是P[X >= intersect_mirna]
+    q = intersect_mirna-1 
+    m = mrna_has_mirna  
+    n = all_mirna-mrna_has_mirna 
+    k = lncrna_has_mirna 
+    stats::phyper(q=q, m=m, n=n, k=k, log = FALSE, lower.tail = FALSE)
   }
 
   cc.tmp.triple$triple <- as.character(cc.tmp.triple$triple)
@@ -119,7 +113,6 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
     all_mirna <- length(unique(path.triple.tmp.df$triple))
     lncrna_has_mirna <- length(unique(cc.tmp.triple$triple))
 
-    ## p值和jaccard系数
     Hyper.pValue.tmp <- myHypergeometric(intersect_mirna = intersect_mirna,
                                          mrna_has_mirna = mrna_has_mirna,
                                          all_mirna = all_mirna,
@@ -131,8 +124,6 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
   colnames(res.df) <- c("Pvalue", "Jaccard")
   rownames(res.df) <- cc.tmp.pathway
 
-  ## all.path.Jaccard.tmp是特定cella_cellb设计到的三元关系在所有pathway的jaccard系数，作为后续矫正score的背景
-
   all.path.tmp <- unique(path.triple.tmp.df$path)
   all.path.Jaccard.tmp <- do.call(rbind, lapply(all.path.tmp, function(x){
     unique(dplyr::filter(path.triple.tmp.df, path==x)[,2]) -> pathway.triple.tmp
@@ -142,9 +133,8 @@ getHyperPathway <- function(data, object, cella_cellb, IS_core=TRUE, Org="Homo s
     return(Jaccard.tmp)
   })) %>% unlist()
 
-  ## 标准化jaccard系数
-  mean.tmp <- base::mean(all.path.Jaccard.tmp) ## 均值
-  sd.tmp <- stats::sd(all.path.Jaccard.tmp) ## 标准差
+  mean.tmp <- base::mean(all.path.Jaccard.tmp) 
+  sd.tmp <- stats::sd(all.path.Jaccard.tmp)
   res.df$NES <- (res.df$Jaccard-mean.tmp)/sd.tmp
 
   res.df$pathway <- rownames(res.df)
