@@ -11,15 +11,9 @@ trans2tripleScore <- function(df){
   df$Receptor <- paste("receiver:", df$Receptor, sep = "")
   df$TF <- paste("TF:", df$TF, sep = "")
   a <- df
-  sum_tf <- aggregate(a[,5],by=list(a$Ligand,a$Receptor),FUN=sum) # 统计每对ligand-receptor对应所有TF的和
+  sum_tf <- aggregate(a[,5],by=list(a$Ligand,a$Receptor),FUN=sum) 
   colnames(sum_tf) <- c("Ligand", "Receptor", 'Score')
-  # aa <- apply(a, 1, function(x){
-  #   tmp = dplyr::filter(sum_tf, Ligand == x[1] & Receptor == x[2])
-  #   res_tmp = as.numeric(x[1,5])/as.numeric(tmp[,3][1])
-  #
-  #   print(class(x[1,5]))
-  #   return(res_tmp)
-  # })
+  
   aa <- c()
   for (i in 1:nrow(a)) {
     tmp = dplyr::filter(sum_tf, Ligand == a[i,1] & Receptor == a[i,2])
