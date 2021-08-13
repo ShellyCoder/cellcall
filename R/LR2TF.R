@@ -11,8 +11,8 @@
 #' @export
 
 LR2TF <- function(object, sender_cell, recevier_cell, slot="expr_l_r_log2_scale", org="Homo sapiens", IS_core=TRUE){
-  options(stringsAsFactors = F) ##options:允许用户对工作空间进行全局设置，stringsAsFactors防止R自动把字符串string的列辨认成factor
-  # library(dplyr)
+  options(stringsAsFactors = F) 
+
   myData <- object@data[[slot]]
 
   detect_gene <- rownames(object@data$expr_mean)
@@ -97,7 +97,7 @@ LR2TF <- function(object, sender_cell, recevier_cell, slot="expr_l_r_log2_scale"
     sankey_matrix <- rbind(sankey_matrix, sankey_tmp)
 
   }
-  # l_r_tf <- l_r_tf[,apply(l_r_tf, 2, function(x){sum(x!=0)})>0] ##删除没检测到的TF
+  # l_r_tf <- l_r_tf[,apply(l_r_tf, 2, function(x){sum(x!=0)})>0] 
   sankey_matrix <- data.frame(sankey_matrix)
   colnames(sankey_matrix) <- c("Ligand", "Receptor",	"TF",	"weight1",	"weight2")
   sankey_matrix <- sankey_matrix[-1,]
