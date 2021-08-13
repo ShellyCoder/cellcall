@@ -19,8 +19,8 @@ getCorrelatedGene <- function(data, cell_type="", tf, target_list,
     p_tmp <- psych::corr.test(t(expr_tmp[tf,]),t(expr_tmp[target_list,]),adjust = "none",use = "pairwise", method = "spearman")
     tmp_pValue = p_tmp$p
     tmp_corr = p_tmp$r
-    tmp_pValue[is.na(tmp_pValue)]=1  ## NA是两gene有标准差为零的情况，因此设P为1，即不显著
-    tmp_corr[is.na(tmp_corr)]=0  ## NA是两gene有标准差为零的情况，因此设P为0，即不显著
+    tmp_pValue[is.na(tmp_pValue)]=1  
+    tmp_corr[is.na(tmp_corr)]=0  
     corr_gene_tmp <- as.data.frame(t(tmp_corr[1,tmp_pValue<pValue,drop=F]))
 
     if(nrow(corr_gene_tmp)>1){
