@@ -43,15 +43,14 @@ CellInter <- setClass("CellInter", slots = list(data = "list",
 #' @importFrom stringr str_split
 #' @export
 
-# 定义CreateNichConObject的现实，并指定参数类型为nichcon对象
 CreateNichConObject <- function(data,
                    min.feature = 3,
                    names.field = 1,
                    names.delim = "_",
                    project = "Microenvironment",
-                   source = "UMI", # "UMI" or "fullLength"
+                   source = "UMI", 
                    scale.factor = 10^6,
-                   Org = "Homo sapiens" # "Homo sapiens" or "Mus musculus"
+                   Org = "Homo sapiens"
                    )
 {
 
@@ -79,19 +78,14 @@ CreateNichConObject <- function(data,
 
   init.meta.data <- data.frame(sampleID = sampleID, celltype = cell_type, nFeature = nFeature, nCounts = nCounts)
 
-  # source("./myProject/code/project/counts2rpm.R")
   if(source=="UMI"){
     data_cpm <- counts2normalized_10X(data, toType = "CPM", scale.factor=scale.factor)
-    # data_cpm_log <- log2(data_cpm+1)
   }else if(source=="fullLength"){
     data_cpm <- counts2normalized_smartseq2(data, Org, "TPM", scale.factor=scale.factor)
-    # data_cpm_log <- log2(data_cpm+1)
   }else if(source=="TPM"){
     data_cpm <- data
-    # data_cpm_log <- log2(data+1)
   }else if(source=="CPM"){
     data_cpm <- data
-    # data_cpm_log <- log2(data+1)
   }
 
   data.list = list()
