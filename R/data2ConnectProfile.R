@@ -18,8 +18,7 @@
 #' @export
 
 ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1, method="weighted", p.adjust=0.05, use.type="median", probs = 0.9, Org = 'Homo sapiens', IS_core = TRUE){
-  Sys.setenv(R_MAX_NUM_DLLS=999) ##Sys.setenv, 修改环境设置，R的namespace是有上限的，如果导入包时超过这个上次就会报错,R_MAX_NUM_DLLS可以修改这个上限
-  options(stringsAsFactors = F) ##options:允许用户对工作空间进行全局设置，stringsAsFactors防止R自动把字符串string的列辨认成factor
+  options(stringsAsFactors = F) 
 
   if(Org == 'Homo sapiens'){
     f.tmp <- system.file("extdata", "new_ligand_receptor_TFs.txt", package="cellcall")
@@ -61,13 +60,12 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
   my_Expr[1:4,1:4]
   detect_gene <- rownames(my_Expr)
 
-  expr_set <- my_Expr[intersect(detect_gene, all.gene.needed),]  ## 表达矩阵输入
+  expr_set <- my_Expr[intersect(detect_gene, all.gene.needed),]  
   detect_gene <- rownames(expr_set)
   cell_type = unique(colnames(expr_set))
   expr.fc <- object@data$withoutlog[detect_gene,]
   colnames(expr.fc) <- colnames(expr_set)
 
-  ## 读入complex_list ,在res 最后几行添加
   complex_matrix <- matrix(ncol = length(colnames(expr_set)))
   complex_matrix <- as.data.frame(complex_matrix)
   colnames(complex_matrix) <- colnames(expr_set)
@@ -81,7 +79,7 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
         if( sum(i_tmp[[1]] %in% detect_gene) == length(i_tmp[[1]]) ){
           tmp_df <- expr_set[i_tmp[[1]],]
           tmp_mean <- colMeans(tmp_df)
-          tmp_index <- unique(unlist(apply(tmp_df, 1,function(x) {which(x==0)}))) # complex任意一个表达为0, 该complex不存在
+          tmp_index <- unique(unlist(apply(tmp_df, 1,function(x) {which(x==0)})))
           tmp_mean[tmp_index] <- 0
 
           # print(res_tmp)
@@ -99,11 +97,10 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
       }
   }
 
-  expr_set <- expr_set[apply(expr_set, 1, function(x){sum(x!=0)})>0,] ##删除没检测到的gene
+  expr_set <- expr_set[apply(expr_set, 1, function(x){sum(x!=0)})>0,]
   detect_gene <- rownames(expr_set)
   # expr_set[1:4,1:4]
 
-  ### 计算每个细胞类型的gene
   print("step1: compute means of gene")
   expr_mean <- matrix(nrow = nrow(expr_set), ncol = length(cell_type))
   myColnames <- c()
@@ -117,8 +114,8 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
           quantile(x, probs = probs,names=FALSE)
       }))
       mean.tmp <- rowMeans(myMatrix)
-      mean.tmp[which(quantil.tmp==0)]<-0 # 3/4 以上全为0的gene均值也为 0
-      myMatrix_mean <- mean.tmp## 每个细胞类型的gene求均值
+      mean.tmp[which(quantil.tmp==0)]<-0 
+      myMatrix_mean <- mean.tmp
     }
     expr_mean[,i] <- myMatrix_mean
     myColnames <- c(myColnames, myCell)
@@ -131,18 +128,14 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
   expr_mean <- expr_mean[apply(expr_mean, 1, function(x){sum(x!=0)})>0,]
   detect_gene <- rownames(expr_mean)
 
-  # gene rank for each cell type for following GSEA
-  # source("./myProject/code/project/GSEA.R")
+
   if(use.type=="median"){
-    # fc.list <- mylog2foldChange(inData = expr.fc, cell.type = cell_type, method="mean", probs = probs)
     fc.list <- mylog2foldChange.diy(inData = expr.fc, cell.type = cell_type, method="median", probs = probs)
   }else{
     fc.list <- mylog2foldChange.diy(inData = expr.fc, cell.type = cell_type, method="mean", probs = probs)
   }
 
-  #  tf -> spearson cor ( first filter) -> gsea enrich testing targets trend of expression
   print("step2: filrter tf-gene with correlation, then score regulons")
-  # source("./myProject/code/project/getCorrelatedGene.R")
   tfs_set <- unique(triple_relation$TF_Symbol)
   regulons_matrix <- matrix(data = 0, nrow = length(tfs_set), ncol = length(cell_type))
 
@@ -155,28 +148,24 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
     print(i)
     tf_val <- lapply(tfs_set, function(x) {
       if(x %in% detect_gene){
-        # Chip-seq实验数据 -> TF-Target
-        # print(x)
         targets <- target_relation[which(target_relation$TF_Symbol==x),2]
         targets <- targets[targets %in% detect_gene]
         if(length(targets)<=0){
           return(0)
         }
-        # 表达值相关(spearman) -> TF-Target [ source("./project/getCorrelatedGene.R") ]
         corGene_tmp <- getCorrelatedGene(data = expr_set,cell_type = i,tf=x, target_list=targets, pValue=pValueCor, corValue=CorValue,topGene=topTargetCor)
         common_targets_tmp <- intersect(corGene_tmp, targets)
-        # print(length(common_targets_tmp))
         if(length(common_targets_tmp)==0){
           return(0)
         }
-        # print(length(common_targets_tmp))
+
         gene.name.tmp <- common_targets_tmp
         term_gene_list.tmp <- data.frame(term.name=rep(1, length(gene.name.tmp)), gene=gene.name.tmp)
 
         if(length(gene.name.tmp)<my_minGSSize){
           return(0)
         }
-        # print(gene.name.tmp)
+
         tryCatch({
           nes.tmp <- getGSEA(term_gene_list = term_gene_list.tmp,
                              FC_OF_CELL = fc.list[[i]], minGSSize=my_minGSSize, maxGSSize=500)
@@ -211,16 +200,15 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
     if(length(which(regulons_matrix[,i]!=0))!=0){
       tfs_set.tmp <- tfs_set[which(regulons_matrix[,i]!=0)]
       tf_val.df <- do.call(rbind, lapply(tfs_set.tmp, function(x) {
-        # Chip-seq实验数据 -> TF-Target
         targets <- target_relation[which(target_relation$TF_Symbol==x),2]
         targets <- targets[targets %in% detect_gene]
         if(length(targets)<=0){
           return(NULL)
         }
-        # 表达值相关(spearman) -> TF-Target [ source("./project/getCorrelatedGene.R") ]
+
         corGene_tmp <- getCorrelatedGene(data = expr_set,cell_type = i,tf=x, target_list=targets, pValue=pValueCor, corValue=CorValue,topGene=topTargetCor)
         common_targets_tmp <- intersect(corGene_tmp, targets)
-        # print(length(common_targets_tmp))
+
         if(length(common_targets_tmp)==0){
           return(NULL)
         }
@@ -244,12 +232,12 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
 
 
   print("step3: get distance between receptor and tf in pathway")
-  # source("./myProject/code/project/getDistanceKEGG.R")
+
   DistanceKEGG <- getDistanceKEGG(data = triple_relation,method = "mean")
 
   print("step4: score downstream activation of ligand-receptor all regulons of given ligand-receptor relation (weighted, max, or mean) ####")
   l_r_inter <- unique(triple_relation[,5:6])
-  expr_r_regulons <- matrix(data = 0,nrow = nrow(l_r_inter), ncol = length(cell_type)) ## 细胞通讯的大类信息（细胞类型） ：A->A,A->B,A->C,,,,C->C
+  expr_r_regulons <- matrix(data = 0,nrow = nrow(l_r_inter), ncol = length(cell_type)) ## A->A,A->B,A->C,,,,C->C
   expr_r_regulons <- as.data.frame(expr_r_regulons)
   rownames(expr_r_regulons) <- paste(l_r_inter$Ligand_Symbol, l_r_inter$Receptor_Symbol,sep = "-")
   colnames(expr_r_regulons) <- cell_type
@@ -307,7 +295,7 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
   print("step6: score ligand-receptor relation (weighted, max, or mean) ####")
 
   l_r_inter <- unique(triple_relation[,5:6])
-  expr_l_r <- matrix(data = 0,nrow = nrow(l_r_inter), ncol = length(cell_type)^2) ## 细胞通讯的大类信息（细胞类型） ：A->A,A->B,A->C,,,,C->C
+  expr_l_r <- matrix(data = 0,nrow = nrow(l_r_inter), ncol = length(cell_type)^2) ##A->A,A->B,A->C,,,,C->C
   expr_l_r <- as.data.frame(expr_l_r)
   rownames(expr_l_r) <- paste(l_r_inter$Ligand_Symbol, l_r_inter$Receptor_Symbol,sep = "-")
   myColnames <- character()
@@ -333,12 +321,9 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
           tf_val <- expr_r_regulons[row_index,j]
 
           if(tf_val > 0 & sender_val>0 & receiver_val >0){
-            # val_tmp <- sender_val^2 + receiver_val^2 + tf_val  #sender_val^2 + receiver_val^2 + tf_val^2
             sender_val_weighted <- softmax_ligand[sender_tmp, i]
             receiver_val_weighted <- softmax_receptor[receiver_tmp, j]
-            # val_tmp <- sender_val_weighted * (receiver_val + tf_val*(sender_val+receiver_val)/(sender_val+receiver_val+tf_val))
             val_tmp <- 100*(sender_val_weighted^2 + receiver_val_weighted^2) * tf_val
-            # print(val_tmp)
           }else{
             val_tmp = 0
           }
@@ -351,11 +336,9 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
     }
   }
 
-  expr_l_r <- expr_l_r[apply(expr_l_r, 1, function(x){sum(x!=0)})>0,] ##删除没检测到的L-R
-  # expr_l_r <- expr_l_r[,which(colSums(expr_l_r)!=0)] ##删除没检测到的cell-M_cell-N
+  expr_l_r <- expr_l_r[apply(expr_l_r, 1, function(x){sum(x!=0)})>0,]
   expr_l_r <- as.data.frame(expr_l_r)
 
-  # test = as.data.frame(exp(tmp2))
   expr_l_r_log2 <- log2(expr_l_r+1)
   expr_l_r_log2_scale <- (expr_l_r_log2-min(expr_l_r_log2))/(max(expr_l_r_log2)-min(expr_l_r_log2))
 
