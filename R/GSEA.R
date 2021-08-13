@@ -61,13 +61,6 @@ getGSEA<-function(term_gene_list, FC_OF_CELL, minGSSize=5, maxGSSize=500) {
   FC_OF_CELL <- FC_OF_CELL
   geneList.sort <- dplyr::arrange(FC_OF_CELL, desc(FC_OF_CELL$log2fc))
 
-  ### geneList 是全表达谱排序后的foldchange  data(geneList)
-  ##  TERM2GENE 一条感兴趣的term中所有基因
-  ##
-  ##  TERM2GENE is a data.frame with first column of term ID and second column of corresponding mapped gene
-  ##  and TERM2NAME is a data.frame with first column of term ID and second column of corresponding term name.
-  ##  TERM2NAME is optional
-
   rownames(geneList.sort) <- geneList.sort[,1]
   gene.name <- geneList.sort[,1]
   geneList.sort$log2fc <- as.numeric(geneList.sort$log2fc)
