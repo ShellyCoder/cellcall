@@ -135,7 +135,7 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
     fc.list <- mylog2foldChange.diy(inData = expr.fc, cell.type = cell_type, method="mean", probs = probs)
   }
 
-  print("step2: filrter tf-gene with correlation, then score regulons")
+  print("step2: filter tf-gene with correlation, then score regulons")
   tfs_set <- unique(triple_relation$TF_Symbol)
   regulons_matrix <- matrix(data = 0, nrow = length(tfs_set), ncol = length(cell_type))
 
