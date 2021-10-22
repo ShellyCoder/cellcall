@@ -65,6 +65,8 @@ ConnectProfile <- function(object, pValueCor=0.05, CorValue=0.1, topTargetCor=1,
   cell_type = unique(colnames(expr_set))
   expr.fc <- object@data$withoutlog[detect_gene,]
   colnames(expr.fc) <- colnames(expr_set)
+  
+  rm(list=c("object"))
 
   complex_matrix <- matrix(ncol = length(colnames(expr_set)))
   complex_matrix <- as.data.frame(complex_matrix)
