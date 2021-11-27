@@ -6,10 +6,10 @@
 #' @return the RPKM or TPM of \code{data}
 counts2normalized_smartseq2 <- function(data, Org, toType, scale.factor=10^6){
   if(Org=="Homo sapiens"){
-    f.tmp <- system.file("extdata", "homo/transcriptmaxLength.Rdata", package="cellwave")
+    f.tmp <- system.file("extdata", "homo/transcriptmaxLength.Rdata", package="cellcall")
     load(f.tmp)
   }else if(Org=="Mus musculus"){
-    f.tmp <- system.file("extdata", "mmus/transcriptmaxLength.Rdata", package="cellwave")
+    f.tmp <- system.file("extdata", "mmus/transcriptmaxLength.Rdata", package="cellcall")
     load(f.tmp)
   }
   # head(g_l)
