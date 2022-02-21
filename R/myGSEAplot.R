@@ -5,7 +5,7 @@
 #' @param geneSetID the character of TF symbol, only significant activated can be inspected
 #' @param selectedGeneID default is NULL, label the position of specific gene in FC flow.
 #' @param mycol the color of each TF. the length is consistent with geneSetID
-#' @importFrom enrichplot plot_grid
+#' @importFrom cowplot plot_grid
 #' @importFrom ggplot2 ggplot geom_line scale_color_manual aes_ xlab ylab geom_hline theme_bw theme element_blank element_rect element_text margin geom_linerange scale_y_continuous geom_rect scale_fill_gradientn geom_segment geom_bar scale_fill_manual unit element_line
 #' @importFrom ggrepel geom_text_repel
 #' @export
