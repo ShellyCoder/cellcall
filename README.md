@@ -5,7 +5,7 @@
 <a name="adf749d9"></a>
 ## Updated information of CellCall
 <a name="58715c1d"></a>
-#### 2022/02/25 -- bug fixed of installing package with R 4.0.1 (contributor: Erqiang Hu)
+#### 2022/02/25 -- bug fixed of installing package with R 4.0.1 (contributor: Erqiang Hu(https://github.com/huerqiang/))
 <a name="58715c1d"></a>
 #### 2021/08/02 -- The research of CellCall is online. Please cite us with https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkab638/6332819.
 <a name="58715c1b"></a>
