@@ -140,7 +140,8 @@ getGSEAplot <- function(gsea.list, myCelltype, fc.list, geneSetID, selectedGeneI
           axis.ticks.x = element_line(),
           axis.text.x = element_text(size = 12, face = "bold"))
 
-  plot_grid(plotlist = plotlist, ncol = 1, align="v", rel_heights = rel_heights)
+  # plot_grid(plotlist = plotlist, ncol = 1, align="v", rel_heights = rel_heights)
+  plot_grid(plotlist = plotlist, ncol = 1, align="v", axis = 'tblr', rel_heights = rel_heights) 
 }
 
 
