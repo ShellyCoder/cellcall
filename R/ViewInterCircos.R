@@ -53,7 +53,10 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
   }else{
     a <- colSums(object@data[[slot]])
   }
-
+  
+  if(sum(a>0)==0){
+    stop("There is no predicted L-R in @data$expr_l_r_log2_scale, looser paramter might be of help.")  
+  }
 
   b <- stringr::str_split(names(a), "-", simplify = T)
   c <- data.frame(b, stringsAsFactors = FALSE)
