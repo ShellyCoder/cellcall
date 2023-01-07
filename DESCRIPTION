@@ -1,7 +1,7 @@
 Package: cellcall
 Title: inference of intercellular networks from single-cell
     transcriptomics
-Version: 0.0.0.9000
+Version: 1.0.7
 Authors@R: 
     person(given = "Tianyuan",
            family = "Liu",
