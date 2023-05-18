@@ -50,9 +50,13 @@ LR2TF <- function(object, sender_cell, recevier_cell, slot="expr_l_r_log2_scale"
     f.tmp <- system.file("extdata", "tf_target_homology.txt", package="cellcall")
     target_relation <- read.table(f.tmp, header = TRUE, quote = "", sep = '\t', stringsAsFactors=FALSE)
   }
+  
+  interest_group <- myData[, paste(sender_cell, recevier_cell, sep = "-"), drop = FALSE]
+  sort_col <- paste(sender_cell, recevier_cell, sep = "-")
+  interest_df <- interest_group[order(interest_group[[sort_col]], decreasing = TRUE), , drop = FALSE]
 
-  interest_group <- myData[,paste(sender_cell, recevier_cell, sep = "-"), drop=F]
-  interest_df <- interest_group[order(interest_group,decreasing = T),,drop=F]
+  # interest_group <- myData[,paste(sender_cell, recevier_cell, sep = "-"), drop=F]
+  # interest_df <- interest_group[order(interest_group,decreasing = T),,drop=F]
   interest_df <- interest_df[which(interest_df[,1]!=0),,drop=F]
 
   # library(stringr)
