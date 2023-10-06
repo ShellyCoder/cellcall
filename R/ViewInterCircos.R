@@ -34,6 +34,16 @@ ViewInterCircos <- function(object, font = 2, cellColor ,lrColor = NULL, order.v
   circle_size = unit(1, "snpc") # snpc unit gives you a square region
   pushViewport(viewport(x = 0, y = 0.5, width = circle_size, height = circle_size,
                         just = c("left", "center")))
+
+  tmp21 <- tryCatch({
+    par(omi = gridOMI(), new = TRUE)
+  }, error = function(e) {
+    omi_values <- gridBase::gridOMI()
+    omi_values[omi_values < 0] <- 0  # Replace negative values with 0
+    par(omi = omi_values, new = TRUE)
+  })
+
+  
   par(omi = gridOMI(), new = TRUE)
 
 
