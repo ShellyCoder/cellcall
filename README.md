@@ -4,6 +4,8 @@
 
 <a name="adf749d9"></a>
 ## Updated information of CellCall
+<a name="58715c1h"></a>
+#### 2023/10/06 -- Bug fixed of Error in par(omi = gridOMI(), new = TRUE) in function ViewInterCircos.
 <a name="58715c1d"></a>
 #### 2022/02/25 -- Bug fixed of package version conflict in enrichplot with R 4.0.1 (contributor: [Erqiang Hu](https://github.com/huerqiang/))
 <a name="58715c1d"></a>
